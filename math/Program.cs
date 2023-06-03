@@ -6,7 +6,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "1.7.13";
+        public static string version = "1.7.15";
     }
 
     class Program
@@ -90,7 +90,7 @@ namespace math
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Math by nfmcpwr v" + Global.version);
+            Console.WriteLine("Math v" + Global.version);
             ModeSelect("");
             //int CalcMode = ModeSelect("");
             /*if (CalcMode == 1)
@@ -109,7 +109,7 @@ namespace math
         public static void Mode1()
         {
             Console.WriteLine("Selected Mode:1");
-            Console.WriteLine("C#の書式に従って数式を入力してください");
+            Console.WriteLine("数式を入力");
             Console.Write("Input:");
             string Input = Console.ReadLine();
             DataTable dataTable = new DataTable();
@@ -120,7 +120,7 @@ namespace math
         public static void Mode2()
         {
             Console.WriteLine("Selected Mode:2");
-            Console.WriteLine("C#の書式に従って数式を入力してください");
+            Console.WriteLine("数式を入力");
             Console.Write("Input:");
             string Input = Console.ReadLine();
             DataTable dataTable = new DataTable();
@@ -416,7 +416,7 @@ namespace math
                 answer = "";
             }
 
-            Console.WriteLine("選択してください");
+            Console.WriteLine("操作を選択");
             Console.WriteLine("------------------------------");
             Console.WriteLine("0 : 式で出力");
             Console.WriteLine("1 : 計算して出力(分数処理不可)");
