@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Data;
+using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace math
 {
@@ -106,23 +110,49 @@ namespace math
             
         }
 
+        static async Task GetUpdate()
+        {
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("math", Global.version));
+            HttpResponseMessage httpResponse = await httpClient.GetAsync("https://api.github.com/repos/nfmcpwr/Math/releases/latest");
+            if (httpResponse.IsSuccessStatusCode == true)
+            {
+                string json = await httpResponse.Content.ReadAsStringAsync();
+                //Console.WriteLine(json);
+                JsonDocument jsonDocument = JsonDocument.Parse(json);
+                JsonElement element = jsonDocument.RootElement;
+                element.TryGetProperty("tag_name", out JsonElement value);
+                string version = value.GetString();
+                //Console.WriteLine(version);
+                if (version != "v" + Global.version)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("アップデートが利用可能です:" + version);
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("アップデートデータの取得に失敗:" + httpResponse.StatusCode);
+            }
+        }
+
         static void Main(string[] args)
         {
+            Console.WriteLine("Math v" + Global.version);
+
             if (args.Length > 0)
             {
                 Global.testkey = args[0];
             }
-            Console.WriteLine("Math v" + Global.version);
+
+            if (NetworkInterface.GetIsNetworkAvailable() == true)
+            {
+                Task task = GetUpdate();
+                task.Wait();
+            }
+
             ModeSelect("");
-            //int CalcMode = ModeSelect("");
-            /*if (CalcMode == 1)
-            {
-                Calc.Mode1();
-            } 
-            else if (CalcMode == 2)
-            {
-                Calc.Mode2();
-            }*/
         }
     }
 
