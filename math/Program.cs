@@ -10,7 +10,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "1.7.15";
+        public static string version = "1.8.01";
         public static string testkey;
     }
 
