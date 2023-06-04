@@ -7,6 +7,7 @@ namespace math
     class Global
     {
         public static string version = "1.7.15";
+        public static string testkey;
     }
 
     class Program
@@ -28,7 +29,7 @@ namespace math
             Console.WriteLine("3 : 文字を含む(1次式)");
             Console.WriteLine("4 : 文字を含む(2次式)");
             Console.WriteLine("5 : 不定積分");
-            Console.WriteLine("6 : 定積分(test)");
+            Console.WriteLine("6 : 定積分");
             Console.WriteLine("------------------------------");
             Console.WriteLine("0 : 終了");
             Console.WriteLine();
@@ -75,11 +76,15 @@ namespace math
             }
             
 
-             //sp
+             //s
              if (Mode == 0)
              {
                 Exit();
              }
+             else if (Mode == 1000)
+            {
+                Test();
+            }
             
         }
 
@@ -88,8 +93,25 @@ namespace math
             //exit
         }
 
+        static void Test()
+        {
+            if (Global.testkey == "38jdr328g7hdu")
+            {
+                Console.WriteLine("∫");
+            }
+            else
+            {
+                ModeSelect("");
+            }
+            
+        }
+
         static void Main(string[] args)
         {
+            if (args.Length > 0)
+            {
+                Global.testkey = args[0];
+            }
             Console.WriteLine("Math v" + Global.version);
             ModeSelect("");
             //int CalcMode = ModeSelect("");
@@ -189,7 +211,7 @@ namespace math
             Console.WriteLine();
             if (kousuu == 1)
             {
-                Console.WriteLine("S ax^p dx");
+                Console.WriteLine("∫ax^p dx");
                 Console.Write("a:");
                 int a = int.Parse(Console.ReadLine());
                 Console.WriteLine();
@@ -211,7 +233,7 @@ namespace math
             }
             else if (kousuu == 2)
             {
-                Console.WriteLine("S ax^p + bx^q dx");
+                Console.WriteLine("∫ax^p + bx^q dx");
                 Console.Write("a:");
                 int a = int.Parse(Console.ReadLine());
                 Console.WriteLine();
@@ -240,7 +262,7 @@ namespace math
             }
             else if (kousuu == 3)
             {
-                Console.WriteLine("S ax^p + bx^q + cx^r dx");
+                Console.WriteLine("∫ax^p + bx^q + cx^r dx");
                 Console.Write("a:");
                 int a = int.Parse(Console.ReadLine());
                 Console.WriteLine();
@@ -277,7 +299,7 @@ namespace math
             }
             else if (kousuu == 4)
             {
-                Console.WriteLine("S ax^p + bx^q + cx^r + dx^s dx");
+                Console.WriteLine("∫ax^p + bx^q + cx^r + dx^s dx");
                 Console.Write("a:");
                 int a = int.Parse(Console.ReadLine());
                 Console.WriteLine();
@@ -322,7 +344,7 @@ namespace math
             }
             else if (kousuu == 5)
             {
-                Console.WriteLine("S ax^p + bx^q + cx^r + dx^s + ex^t dx");
+                Console.WriteLine("∫ax^p + bx^q + cx^r + dx^s + ex^t dx");
                 Console.Write("a:");
                 int a = int.Parse(Console.ReadLine());
                 Console.WriteLine();
@@ -379,7 +401,7 @@ namespace math
         {
             Console.WriteLine("積分区間の入力");
             Console.WriteLine("b ");
-            Console.WriteLine(" S f(x) dx");
+            Console.WriteLine("∫f(x) dx");
             Console.WriteLine("a ");
             Console.WriteLine();
             Console.Write("b:");
