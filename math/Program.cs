@@ -10,8 +10,8 @@ namespace math
 {
     class Global
     {
-        public static string version = "1.8.01";
-        public static string testkey;
+        public static string version = "1.8.12";
+        public static string testkey = Guid.NewGuid().ToString("N");
     }
 
     class Program
@@ -82,12 +82,17 @@ namespace math
 
              //s
              if (Mode == 0)
-             {
+            {
                 Exit();
-             }
+            }
              else if (Mode == 1000)
             {
-                Test();
+                Test(Console.ReadLine());
+            }
+             else if (Mode == 1001)
+            {
+                Console.WriteLine(Global.testkey);
+                ModeSelect("");
             }
             
         }
@@ -97,11 +102,21 @@ namespace math
             //exit
         }
 
-        static void Test()
+        static void Test(string key)
         {
-            if (Global.testkey == "38jdr328g7hdu")
+            if (Global.testkey == key)
             {
-                Console.WriteLine("∫");
+                Ping ping = new Ping();
+                try
+                {
+                    PingReply reply = ping.Send("google.com");
+                    Console.WriteLine(reply.Status);
+                }
+                catch (PingException)
+                {
+
+                }
+                
             }
             else
             {
@@ -135,24 +150,47 @@ namespace math
             {
                 Console.WriteLine("アップデートデータの取得に失敗:" + httpResponse.StatusCode);
             }
+            ModeSelect("");
+        }
+
+        static void ConnectionCheck()
+        {
+            Ping ping = new Ping();
+            //int c = 1;
+            try
+            {
+                PingReply reply = ping.Send("google.com");
+                //Console.WriteLine(reply.Status);
+                Task task = GetUpdate();
+                task.Wait();
+                
+            }
+            catch (PingException)
+            {
+                ModeSelect("");
+            }
+            
+            
+
+            
         }
 
         static void Main(string[] args)
         {
             Console.WriteLine("Math v" + Global.version);
+            ConnectionCheck();
 
-            if (args.Length > 0)
-            {
-                Global.testkey = args[0];
-            }
-
-            if (NetworkInterface.GetIsNetworkAvailable() == true)
+            /*if (NetworkInterface.GetIsNetworkAvailable() == true)
             {
                 Task task = GetUpdate();
                 task.Wait();
+                ModeSelect("");
             }
-
-            ModeSelect("");
+            else
+            {
+                ModeSelect("");
+            }*/
+            //ModeSelect("");
         }
     }
 
