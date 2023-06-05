@@ -1,5 +1,6 @@
 # Math
 ![](https://img.shields.io/badge/-Windows-0078D6.svg?logo=windows&style=plastic&label=)
+![](https://img.shields.io/github/v/release/nfmcpwr/Math?style=plastic)
 ![](https://img.shields.io/github/downloads/nfmcpwr/Math/total?color=green&style=plastic)<br>
 数学計算機
 
