@@ -10,7 +10,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "1.9.10";
+        public static string version = "1.9.11";
         public static string testkey = Guid.NewGuid().ToString("N");
     }
 
@@ -640,8 +640,8 @@ namespace math
                     stringBuilder.Append(ans2);
                     //q0 = true;
                 }
-                
 
+                Program.ModeSelect(stringBuilder.ToString());
                 
             }
             else if (kousuu == 3)
@@ -705,6 +705,8 @@ namespace math
                     stringBuilder.Append(ans3);
                     //r0 = true;
                 }
+
+                Program.ModeSelect(stringBuilder.ToString());
 
             }
             else if (kousuu == 4)
@@ -788,6 +790,8 @@ namespace math
                     stringBuilder.Append(ans4);
                     //s0 = true;
                 }
+
+                Program.ModeSelect(stringBuilder.ToString());
 
             }
             else if (kousuu == 5)
@@ -890,6 +894,8 @@ namespace math
                     stringBuilder.Append(ans5);
                     //t0 = true;
                 }
+
+                Program.ModeSelect(stringBuilder.ToString());
 
             }
         }
