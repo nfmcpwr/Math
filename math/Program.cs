@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -10,8 +12,9 @@ namespace math
 {
     class Global
     {
-        public static string version = "1.9.11";
+        public static string version = "2.0.01";
         public static string testkey = Guid.NewGuid().ToString("N");
+        public static bool update = false;
     }
 
     class Program
@@ -35,15 +38,29 @@ namespace math
             Console.WriteLine("4 : 2次式の解");
             Console.WriteLine("5 : 不定積分");
             Console.WriteLine("6 : 定積分");
+            Console.WriteLine("7 : 計算練習");
             Console.WriteLine("------------------------------");
+            if (Global.update == true)
+            {
+                Console.WriteLine("1000 : アップデートリリースページを開く");
+            }
             Console.WriteLine("0 : 終了");
             Console.WriteLine();
             Console.Write("Input:");
             try
             {
-                int SelectedMode = int.Parse(Console.ReadLine());
-                Console.Clear();
-                CheckMode(SelectedMode);
+                string mode = Console.ReadLine();
+                if (mode == Global.testkey)
+                {
+                    Console.Clear();
+                    Test();
+                }
+                else
+                {
+                    int SelectedMode = int.Parse(mode);
+                    Console.Clear();
+                    CheckMode(SelectedMode);
+                }
             }
             catch(OverflowException)
             {
@@ -90,6 +107,11 @@ namespace math
                 //定積分
                 Calc.Mode5(true);
             }
+            else if (Mode == 7)
+            {
+                //計算練習
+                Calc.Mode7();
+            }
             
 
              //s
@@ -99,7 +121,14 @@ namespace math
             }
              else if (Mode == 1000)
             {
-                Test(Console.ReadLine());
+                if (Global.update == true)
+                {
+                    Process.Start("msedge.exe", "https://github.com/nfmcpwr/Math/releases/");
+                }
+                else
+                {
+                    ModeSelect("");
+                }
             }
              else if (Mode == 1001)
             {
@@ -114,16 +143,8 @@ namespace math
             //exit
         }
 
-        static void Test(string key)
+        static void Test()
         {
-            if (Global.testkey == key)
-            {
-                throw new Exception("UnknownException");
-            }
-            else
-            {
-                
-            }
             
         }
 
@@ -146,6 +167,7 @@ namespace math
                     Console.WriteLine();
                     Console.WriteLine("アップデートが利用可能:" + version);
                     Console.WriteLine();
+                    Global.update = true;
                 }
             }
             else
@@ -898,6 +920,138 @@ namespace math
                 Program.ModeSelect(stringBuilder.ToString());
 
             }
+        }
+
+        public static void Mode7()
+        {
+            Console.WriteLine("計算トレーニングモード");
+            Console.WriteLine("含む計算を選択");
+            Console.WriteLine("1 : +");
+            Console.WriteLine("2 : -");
+            Console.WriteLine("3 : *");
+            //Console.WriteLine("4 : /");
+
+            Console.Write("Input:");
+            int mode = int.Parse(Console.ReadLine());
+
+            Console.WriteLine();
+            Console.WriteLine("レベル選択");
+            Console.WriteLine("1 : 4桁まで,-符号なし");
+            Console.WriteLine("2 : int型整数全範囲");
+            int level = int.Parse(Console.ReadLine());
+            
+
+            if (level == 1)
+            {
+                Random random = new Random();
+                int[] number = { 106, 112, 115, 122, 130, 214, 215, 217, 222, 228, 229, 302, 305, 307, 312, 314, 315, 321, 322, 402, 404, 422, 507, 515, 518, 520, 523, 525, 606, 610, 611, 617, 618, 620, 701, 702, 706, 715, 722, 730, 804, 808, 810, 820, 830, 908, 909, 1001, 1005, 1010, 1013, 1028, 1031, 1107, 1115, 1124, 1201, 1208, 1210, 1212, 1213 };
+                Stopwatch stopwatch = new Stopwatch();
+                bool[] result = new bool[10];
+                stopwatch.Start();
+                result[0] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[1] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[2] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[3] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[4] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[5] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[6] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[7] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[8] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                result[9] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                stopwatch.Stop();
+                Console.Clear();
+                Console.WriteLine("結果");
+                int count = result.Count(x => x == true);
+                TimeSpan timeSpan = stopwatch.Elapsed;
+                int score = (int)((count * 100) - Math.Round(timeSpan.TotalSeconds,MidpointRounding.AwayFromZero));
+                Console.WriteLine("正解数: " + count + "/10");
+                Console.WriteLine("タイム: " + timeSpan.TotalSeconds + " 秒");
+                Console.WriteLine("スコア: " + score);
+                Console.WriteLine();
+                Console.Write("Enterで終了");
+                Console.ReadLine();
+            }
+            else
+            {
+                Random random = new Random();
+                Stopwatch stopwatch = new Stopwatch();
+                bool[] result = new bool[10];
+                stopwatch.Start();
+                result[0] = Q(random.Next(),random.Next(),mode);
+                result[1] = Q(random.Next(), random.Next(), mode);
+                result[2] = Q(random.Next(), random.Next(), mode);
+                result[3] = Q(random.Next(), random.Next(), mode);
+                result[4] = Q(random.Next(), random.Next(), mode);
+                result[5] = Q(random.Next(), random.Next(), mode);
+                result[6] = Q(random.Next(), random.Next(), mode);
+                result[7] = Q(random.Next(), random.Next(), mode);
+                result[8] = Q(random.Next(), random.Next(), mode);
+                result[9] = Q(random.Next(), random.Next(), mode);
+                stopwatch.Stop();
+                Console.Clear();
+                Console.WriteLine("結果");
+                int count = result.Count(x => x == true);
+                TimeSpan timeSpan = stopwatch.Elapsed;
+                int score = (int)((count * 100) - Math.Round(timeSpan.TotalSeconds, MidpointRounding.AwayFromZero));
+                Console.WriteLine("正解数: " + count + "/10");
+                Console.WriteLine("タイム: " + timeSpan.TotalSeconds + " 秒");
+                Console.WriteLine("スコア: " + score);
+                Console.WriteLine();
+                Console.Write("Enterで終了");
+                Console.ReadLine();
+            }
+
+           static bool Q(int a,int b,int mode)
+            {
+                Console.WriteLine();
+                int answer;
+                if (mode == 1)
+                {
+                    answer = a + b;
+                    Console.Write(a + " + " + b + " = ");
+                    int input = int.Parse(Console.ReadLine());
+                    if (answer == input)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else if (mode == 2)
+                {
+                    answer = a - b;
+                    Console.Write(a + " - " + b + " = ");
+                    int input = int.Parse(Console.ReadLine());
+                    if (answer == input)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else if (mode == 3)
+                {
+                    answer = a * b;
+                    Console.Write(a + " * " + b + " = ");
+                    int input = int.Parse(Console.ReadLine());
+                    if (answer == input)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false; //エラー回避用
+                }
+            } 
         }
     }
 }
