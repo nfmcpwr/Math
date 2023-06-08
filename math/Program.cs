@@ -12,7 +12,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "2.0.01";
+        public static string version = "2.0.05";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
     }
@@ -113,9 +113,10 @@ namespace math
                 Calc.Mode7();
             }
             
+            
 
              //s
-             if (Mode == 0)
+             else if (Mode == 0)
             {
                 Exit();
             }
@@ -135,6 +136,10 @@ namespace math
                 Console.WriteLine(Global.testkey);
                 ModeSelect("");
             }
+            else
+            {
+                ModeSelect("");
+            }
             
         }
 
@@ -145,7 +150,7 @@ namespace math
 
         static void Test()
         {
-            
+            throw new Exception("TestException");
         }
 
         static async Task GetUpdate()
@@ -938,6 +943,7 @@ namespace math
             Console.WriteLine("レベル選択");
             Console.WriteLine("1 : 4桁まで,-符号なし");
             Console.WriteLine("2 : int型整数全範囲");
+            Console.Write("Input:");
             int level = int.Parse(Console.ReadLine());
             
 
@@ -970,6 +976,8 @@ namespace math
                 Console.WriteLine();
                 Console.Write("Enterで終了");
                 Console.ReadLine();
+                Console.Clear();
+                Program.ModeSelect("");
             }
             else
             {
@@ -999,6 +1007,8 @@ namespace math
                 Console.WriteLine();
                 Console.Write("Enterで終了");
                 Console.ReadLine();
+                Console.Clear();
+                Program.ModeSelect("");
             }
 
            static bool Q(int a,int b,int mode)
