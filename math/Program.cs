@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.NetworkInformation;
@@ -12,9 +13,11 @@ namespace math
 {
     class Global
     {
-        public static string version = "2.0.05";
+        public static string version = "2.0.16";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
+        public static bool devmode = false;
+        //public static int a;
     }
 
     class Program
@@ -28,6 +31,12 @@ namespace math
                 Console.WriteLine("前回の計算の答えは " + Answer);
                 Console.WriteLine();
                 Console.WriteLine();
+            }
+
+            if (Global.devmode == true)
+            {
+                Console.WriteLine("開発者モード有効");
+
             }
 
             Console.WriteLine("操作を選択");
@@ -44,6 +53,14 @@ namespace math
             {
                 Console.WriteLine("1000 : アップデートリリースページを開く");
             }
+
+            if (Global.devmode == true)
+            {
+                Console.WriteLine("1001 : 開発者キーの取得");
+                Console.WriteLine("1002 : Google Classroomを開く");
+                Console.WriteLine("1003 : チャートを開く");
+            }
+
             Console.WriteLine("0 : 終了");
             Console.WriteLine();
             Console.Write("Input:");
@@ -124,7 +141,8 @@ namespace math
             {
                 if (Global.update == true)
                 {
-                    Process.Start("msedge.exe", "https://github.com/nfmcpwr/Math/releases/");
+                    //Process.Start("msedge.exe", "https://github.com/nfmcpwr/Math/releases/");
+                    OpenUrl("https://github.com/nfmcpwr/Math/releases/");
                 }
                 else
                 {
@@ -135,6 +153,17 @@ namespace math
             {
                 Console.WriteLine(Global.testkey);
                 ModeSelect("");
+            }
+            else if (Mode == 1002)
+            {
+                //System.Diagnostics.Process.Start("explorer.exe", "msedge https://classroom.google.com/c/NjAzNDU1NDUxMTU4");
+                OpenUrl("https://classroom.google.com/c/NjAzNDU1NDUxMTU4");
+            }
+            else if (Mode == 1003)
+            {
+                string name = DataManager.Activity.File.ReadFileActivity("math","chartlogin.id");
+                string key = DataManager.Activity.File.ReadFileActivity("math", "chartlogin.key");
+                OpenUrl("https://sviewer.jp/books/index.html?name=" + name + "&password=" + key);
             }
             else
             {
@@ -150,7 +179,31 @@ namespace math
 
         static void Test()
         {
-            throw new Exception("TestException");
+            Console.WriteLine("チャートログイン情報の設定");
+            //DataManager.Activity.CheckDirectoryActivity("math");
+            Console.Write("ID:");
+            string id = Console.ReadLine();
+            //DataManager.Activity.CheckFileActivity("math", "chartlogin.id");
+            DataManager.Activity.File.WriteFileActivity("math", "chartlogin.id",id);
+            Console.WriteLine();
+            Console.Write("パスワード:");
+            string pw = Console.ReadLine();
+            //DataManager.Activity.CheckFileActivity("math", "chartlogin.key");
+            DataManager.Activity.File.WriteFileActivity("math", "chartlogin.key", pw);
+
+        }
+
+        
+
+        static Process OpenUrl(string url)
+        {
+            ProcessStartInfo pi = new ProcessStartInfo()
+            {
+                FileName = url,
+                UseShellExecute = true,
+            };
+
+            return Process.Start(pi);
         }
 
         static async Task GetUpdate()
@@ -215,7 +268,22 @@ namespace math
 
         static void Main(string[] args)
         {
+            DataManager.Activity.Root.CheckRootDirActivity();
+            DataManager.Activity.CheckDirectoryActivity("math");
+            DataManager.Activity.CheckFileActivity("math", "chartlogin.id");
+            DataManager.Activity.CheckFileActivity("math", "chartlogin.key");
+
+            if (File.Exists(Path.Combine(DataManager.GlobalVariables.DataPath,"math","dev")) == false)
+            {
+                DataManager.Activity.CheckFileActivity("math", "dev");
+                Exit();
+            }
+
             Console.WriteLine("Math v" + Global.version);
+            if (0 < args.Length && args[0] == "BFC73BBA0F6D4883A3EDC5B905455ED1")
+            {
+                Global.devmode = true;
+            }
             ConnectionCheck();
 
             /*if (NetworkInterface.GetIsNetworkAvailable() == true)
@@ -942,7 +1010,7 @@ namespace math
             Console.WriteLine();
             Console.WriteLine("レベル選択");
             Console.WriteLine("1 : 4桁まで,-符号なし");
-            Console.WriteLine("2 : int型整数全範囲");
+            Console.WriteLine("2 : +-4桁");
             Console.Write("Input:");
             int level = int.Parse(Console.ReadLine());
             
@@ -985,16 +1053,16 @@ namespace math
                 Stopwatch stopwatch = new Stopwatch();
                 bool[] result = new bool[10];
                 stopwatch.Start();
-                result[0] = Q(random.Next(),random.Next(),mode);
-                result[1] = Q(random.Next(), random.Next(), mode);
-                result[2] = Q(random.Next(), random.Next(), mode);
-                result[3] = Q(random.Next(), random.Next(), mode);
-                result[4] = Q(random.Next(), random.Next(), mode);
-                result[5] = Q(random.Next(), random.Next(), mode);
-                result[6] = Q(random.Next(), random.Next(), mode);
-                result[7] = Q(random.Next(), random.Next(), mode);
-                result[8] = Q(random.Next(), random.Next(), mode);
-                result[9] = Q(random.Next(), random.Next(), mode);
+                result[0] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[1] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[2] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[3] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[4] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[5] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[6] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[7] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[8] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
+                result[9] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
                 stopwatch.Stop();
                 Console.Clear();
                 Console.WriteLine("結果");
