@@ -5,13 +5,17 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>nfmcpwr</Authors>
     <Company />
-    <Version>2.0.16</Version>
+    <Version>2.0.17</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="DataManager">
       <HintPath>DataManager.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="dicdata\" />
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "2.0.16";
+        public static string version = "2.0.17";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -51,7 +51,7 @@ namespace math
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
-                Console.WriteLine("1000 : アップデートリリースページを開く");
+                Console.WriteLine("100 : アップデートリリースページを開く");
             }
 
             if (Global.devmode == true)
@@ -59,6 +59,7 @@ namespace math
                 Console.WriteLine("1001 : 開発者キーの取得");
                 Console.WriteLine("1002 : Google Classroomを開く");
                 Console.WriteLine("1003 : チャートを開く");
+                Console.WriteLine("1004 : 辞書モード");
             }
 
             Console.WriteLine("0 : 終了");
@@ -137,7 +138,7 @@ namespace math
             {
                 Exit();
             }
-             else if (Mode == 1000)
+             else if (Mode == 100)
             {
                 if (Global.update == true)
                 {
@@ -164,6 +165,10 @@ namespace math
                 string name = DataManager.Activity.File.ReadFileActivity("math","chartlogin.id");
                 string key = DataManager.Activity.File.ReadFileActivity("math", "chartlogin.key");
                 OpenUrl("https://sviewer.jp/books/index.html?name=" + name + "&password=" + key);
+            }
+            else if (Mode == 1004)
+            {
+                DicMode();
             }
             else
             {
@@ -193,7 +198,37 @@ namespace math
 
         }
 
-        
+        static void DicMode()
+        {
+            Console.Clear();
+            Console.WriteLine("辞書モード(exitで終了)");
+            Console.Write("検索する単語を入力:");
+            string w = Console.ReadLine();
+            if (w == "exit")
+            {
+                ModeSelect("");
+            }
+            else
+            {
+                try
+                {
+                    StreamReader streamReader = new StreamReader(".\\dicdata\\" + w, Encoding.UTF8);
+                    string b6 = streamReader.ReadToEnd();
+                    Console.WriteLine();
+                    Console.Write("意味:");
+                    Console.WriteLine(Encoding.UTF8.GetString(Convert.FromBase64String(b6)));
+                    Console.ReadLine();
+                    DicMode();
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("単語が辞書に登録されていません");
+                    Console.ReadLine();
+                    DicMode();
+                }
+            }
+
+        }
 
         static Process OpenUrl(string url)
         {
