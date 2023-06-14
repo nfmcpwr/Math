@@ -13,7 +13,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "2.0.17";
+        public static string version = "2.0.20";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -36,6 +36,7 @@ namespace math
             if (Global.devmode == true)
             {
                 Console.WriteLine("開発者モード有効");
+                Console.WriteLine();
 
             }
 
@@ -43,7 +44,7 @@ namespace math
             Console.WriteLine("1 : 文字を含まない計算");
             Console.WriteLine("2 : 微分");
             //Console.WriteLine("2 : 文字を含まない計算(小数を含む)");
-            Console.WriteLine("3 : 文字を含む(1次式)");
+            Console.WriteLine("3 : 1次式の解");
             Console.WriteLine("4 : 2次式の解");
             Console.WriteLine("5 : 不定積分");
             Console.WriteLine("6 : 定積分");
@@ -56,10 +57,11 @@ namespace math
 
             if (Global.devmode == true)
             {
-                Console.WriteLine("1001 : 開発者キーの取得");
+                Console.WriteLine("1001 : 設定用キーの取得");
                 Console.WriteLine("1002 : Google Classroomを開く");
                 Console.WriteLine("1003 : チャートを開く");
                 Console.WriteLine("1004 : 辞書モード");
+                Console.WriteLine();
             }
 
             Console.WriteLine("0 : 終了");
@@ -128,7 +130,18 @@ namespace math
             else if (Mode == 7)
             {
                 //計算練習
-                Calc.Mode7();
+                try
+                {
+                    Calc.Mode7();
+                }
+                catch (OverflowException)
+                {
+                    ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
+                }
+                catch (FormatException)
+                {
+                    ExceptionHandler("System.FormatException", "int型以外の値が入力されました");
+                }
             }
             
             
@@ -150,23 +163,23 @@ namespace math
                     ModeSelect("");
                 }
             }
-             else if (Mode == 1001)
+             else if (Mode == 1001 && Global.devmode == true)
             {
                 Console.WriteLine(Global.testkey);
                 ModeSelect("");
             }
-            else if (Mode == 1002)
+            else if (Mode == 1002 && Global.devmode == true)
             {
                 //System.Diagnostics.Process.Start("explorer.exe", "msedge https://classroom.google.com/c/NjAzNDU1NDUxMTU4");
                 OpenUrl("https://classroom.google.com/c/NjAzNDU1NDUxMTU4");
             }
-            else if (Mode == 1003)
+            else if (Mode == 1003 && Global.devmode == true)
             {
                 string name = DataManager.Activity.File.ReadFileActivity("math","chartlogin.id");
                 string key = DataManager.Activity.File.ReadFileActivity("math", "chartlogin.key");
                 OpenUrl("https://sviewer.jp/books/index.html?name=" + name + "&password=" + key);
             }
-            else if (Mode == 1004)
+            else if (Mode == 1004 && Global.devmode == true)
             {
                 DicMode();
             }
@@ -435,8 +448,10 @@ namespace math
 
         public static void Mode5(bool Tei)
         {
+            try
+            {
 
-            if (Tei == true)
+                if (Tei == true)
             {
                 Console.WriteLine("Selected Mode:6");
             }
@@ -463,7 +478,7 @@ namespace math
 
                 if (Tei == true)
                 {
-                    Calc.Teiseki(1,a + " / " + ap, ap,"",null,"",null,"",null,"",null);
+                    Calc.Teiseki(1, a + " / " + ap, ap, "", null, "", null, "", null, "", null);
                 }
                 else
                 {
@@ -635,6 +650,15 @@ namespace math
                 }
             }
         }
+            catch (FormatException)
+            {
+                Program.ExceptionHandler("System.FormatException", "int型でない値が入力されました");
+            }
+            catch(OverflowException)
+            {
+                Program.ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
+            }
+        }
 
         public static void Teiseki(int kousuu,string F1_1,int? F1_2,string F2_1,int? F2_2,string F3_1,int? F3_2,string F4_1,int? F4_2,string F5_1,int? F5_2) //ax^p + bx^q = a,p,b,q
         {
@@ -700,333 +724,345 @@ namespace math
         public static void Mode2() //微分
         {
             Console.WriteLine("Selected Mode:2");
-            
-
-            Console.Write("項数を入力:");
-            int kousuu = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            if (kousuu == 1)
+            try
             {
-                Console.WriteLine("ax^p");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
 
-                int ap = p - 1;
-                string ans = (a * p) + "x^" + ap;
-                if (p != 0)
+
+                Console.Write("項数を入力:");
+                int kousuu = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                if (kousuu == 1)
                 {
-                    Program.ModeSelect(ans);
+                    Console.WriteLine("ax^p");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    int ap = p - 1;
+                    string ans = (a * p) + "x^" + ap;
+                    if (p != 0)
+                    {
+                        Program.ModeSelect(ans);
+                    }
+                    else
+                    {
+                        Program.ModeSelect(" ");
+                    }
+
+
                 }
-                else
+                else if (kousuu == 2)
                 {
-                    Program.ModeSelect(" ");
+                    Console.WriteLine("ax^p + bx^q");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    int b = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    int q = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    int ap = p - 1;
+                    int bq = q - 1;
+
+                    string ans1 = (a * p) + "x^" + ap;
+                    string ans2 = (b * q) + "x^" + bq;
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    bool p0 = false;
+                    //bool q0 = false;
+
+                    if (p != 0)
+                    {
+                        stringBuilder.Append(ans1);
+                        p0 = true;
+                    }
+
+                    if (q != 0)
+                    {
+                        if (p0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans2);
+                        //q0 = true;
+                    }
+
+                    Program.ModeSelect(stringBuilder.ToString());
+
+                }
+                else if (kousuu == 3)
+                {
+                    Console.WriteLine("ax^p + bx^q + cx^r");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    int b = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    int q = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    int c = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    int r = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    int ap = p - 1;
+                    int bq = q - 1;
+                    int cr = r - 1;
+                    string ans1 = (a * p) + "x^" + ap;
+                    string ans2 = (b * q) + "x^" + bq;
+                    string ans3 = (c * r) + "x^" + cr;
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    bool p0 = false;
+                    bool q0 = false;
+                    //bool r0 = false;
+
+                    if (p != 0)
+                    {
+                        stringBuilder.Append(ans1);
+                        p0 = true;
+                    }
+
+                    if (q != 0)
+                    {
+                        if (p0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans2);
+                        q0 = true;
+                    }
+
+                    if (r != 0)
+                    {
+                        if (q0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans3);
+                        //r0 = true;
+                    }
+
+                    Program.ModeSelect(stringBuilder.ToString());
+
+                }
+                else if (kousuu == 4)
+                {
+                    Console.WriteLine("ax^p + bx^q + cx^r + dx^s");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    int b = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    int q = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    int c = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    int r = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("d:");
+                    int d = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("s:");
+                    int s = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    int ap = p - 1;
+                    int bq = q - 1;
+                    int cr = r - 1;
+                    int ds = s - 1;
+                    string ans1 = (a * p) + "x^" + ap;
+                    string ans2 = (b * q) + "x^" + bq;
+                    string ans3 = (c * r) + "x^" + cr;
+                    string ans4 = (d * s) + "x^" + ds;
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    bool p0 = false;
+                    bool q0 = false;
+                    bool r0 = false;
+                    //bool s0 = false;
+
+                    if (p != 0)
+                    {
+                        stringBuilder.Append(ans1);
+                        p0 = true;
+                    }
+
+                    if (q != 0)
+                    {
+                        if (p0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans2);
+                        q0 = true;
+                    }
+
+                    if (r != 0)
+                    {
+                        if (q0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans3);
+                        r0 = true;
+                    }
+
+                    if (s != 0)
+                    {
+                        if (r0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans4);
+                        //s0 = true;
+                    }
+
+                    Program.ModeSelect(stringBuilder.ToString());
+
+                }
+                else if (kousuu == 5)
+                {
+                    Console.WriteLine("ax^p + bx^q + cx^r + dx^s + ex^t");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    int b = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    int q = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    int c = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    int r = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("d:");
+                    int d = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("s:");
+                    int s = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("e:");
+                    int e = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("t:");
+                    int t = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    int ap = p - 1;
+                    int bq = q - 1;
+                    int cr = r - 1;
+                    int ds = s - 1;
+                    int et = t - 1;
+                    string ans1 = (a * p) + "x^" + ap;
+                    string ans2 = (b * q) + "x^" + bq;
+                    string ans3 = (c * r) + "x^" + cr;
+                    string ans4 = (d * s) + "x^" + ds;
+                    string ans5 = (e * t) + "x^" + et;
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    bool p0 = false;
+                    bool q0 = false;
+                    bool r0 = false;
+                    bool s0 = false;
+
+                    if (p != 0)
+                    {
+                        stringBuilder.Append(ans1);
+                        p0 = true;
+                    }
+
+                    if (q != 0)
+                    {
+                        if (p0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans2);
+                        q0 = true;
+                    }
+
+                    if (r != 0)
+                    {
+                        if (q0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans3);
+                        r0 = true;
+                    }
+
+                    if (s != 0)
+                    {
+                        if (r0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans4);
+                        s0 = true;
+                    }
+
+                    if (t != 0)
+                    {
+                        if (s0 == true)
+                        {
+                            stringBuilder.Append(" + ");
+                        }
+
+                        stringBuilder.Append(ans5);
+                        //t0 = true;
+                    }
+
+                    Program.ModeSelect(stringBuilder.ToString());
+
                 }
 
-                
+            } 
+            catch (OverflowException)
+            {
+                Program.ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
             }
-            else if (kousuu == 2)
+            catch (FormatException)
             {
-                Console.WriteLine("ax^p + bx^q");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                int ap = p - 1;
-                int bq = q - 1;
-        
-                string ans1 = (a * p) + "x^" + ap;
-                string ans2 = (b * q) + "x^" + bq;
-
-                StringBuilder stringBuilder = new StringBuilder();
-                bool p0 = false;
-                //bool q0 = false;
-
-                if (p != 0)
-                {
-                    stringBuilder.Append(ans1);
-                    p0 = true;
-                }
-
-                if (q != 0)
-                {
-                    if (p0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans2);
-                    //q0 = true;
-                }
-
-                Program.ModeSelect(stringBuilder.ToString());
-                
-            }
-            else if (kousuu == 3)
-            {
-                Console.WriteLine("ax^p + bx^q + cx^r");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                int ap = p - 1;
-                int bq = q - 1;
-                int cr = r - 1;
-                string ans1 = (a * p) + "x^" + ap;
-                string ans2 = (b * q) + "x^" + bq;
-                string ans3 = (c * r) + "x^" + cr;
-
-                StringBuilder stringBuilder = new StringBuilder();
-                bool p0 = false;
-                bool q0 = false;
-                //bool r0 = false;
-
-                if (p != 0)
-                {
-                    stringBuilder.Append(ans1);
-                    p0 = true;
-                }
-
-                if (q != 0)
-                {
-                    if (p0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans2);
-                    q0 = true;
-                }
-
-                if (r != 0)
-                {
-                    if (q0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans3);
-                    //r0 = true;
-                }
-
-                Program.ModeSelect(stringBuilder.ToString());
-
-            }
-            else if (kousuu == 4)
-            {
-                Console.WriteLine("ax^p + bx^q + cx^r + dx^s");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("d:");
-                int d = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("s:");
-                int s = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                int ap = p - 1;
-                int bq = q - 1;
-                int cr = r - 1;
-                int ds = s - 1;
-                string ans1 = (a * p) + "x^" + ap;
-                string ans2 = (b * q) + "x^" + bq;
-                string ans3 = (c * r) + "x^" + cr;
-                string ans4 = (d * s) + "x^" + ds;
-
-                StringBuilder stringBuilder = new StringBuilder();
-                bool p0 = false;
-                bool q0 = false;
-                bool r0 = false;
-                //bool s0 = false;
-
-                if (p != 0)
-                {
-                    stringBuilder.Append(ans1);
-                    p0 = true;
-                }
-
-                if (q != 0)
-                {
-                    if (p0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans2);
-                    q0 = true;
-                }
-
-                if (r != 0)
-                {
-                    if (q0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans3);
-                    r0 = true;
-                }
-
-                if (s != 0)
-                {
-                    if (r0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans4);
-                    //s0 = true;
-                }
-
-                Program.ModeSelect(stringBuilder.ToString());
-
-            }
-            else if (kousuu == 5)
-            {
-                Console.WriteLine("ax^p + bx^q + cx^r + dx^s + ex^t");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("d:");
-                int d = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("s:");
-                int s = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("e:");
-                int e = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("t:");
-                int t = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                int ap = p - 1;
-                int bq = q - 1;
-                int cr = r - 1;
-                int ds = s - 1;
-                int et = t - 1;
-                string ans1 = (a * p) + "x^" + ap;
-                string ans2 = (b * q) + "x^" + bq;
-                string ans3 = (c * r) + "x^" + cr;
-                string ans4 = (d * s) + "x^" + ds;
-                string ans5 = (e * t) + "x^" + et;
-
-                StringBuilder stringBuilder = new StringBuilder();
-                bool p0 = false;
-                bool q0 = false;
-                bool r0 = false;
-                bool s0 = false;
-
-                if (p != 0)
-                {
-                    stringBuilder.Append(ans1);
-                    p0 = true;
-                }
-
-                if (q != 0)
-                {
-                    if (p0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans2);
-                    q0 = true;
-                }
-
-                if (r != 0)
-                {
-                    if (q0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans3);
-                    r0 = true;
-                }
-
-                if (s != 0)
-                {
-                    if (r0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans4);
-                    s0 = true;
-                }
-
-                if (t != 0)
-                {
-                    if (s0 == true)
-                    {
-                        stringBuilder.Append(" + ");
-                    }
-
-                    stringBuilder.Append(ans5);
-                    //t0 = true;
-                }
-
-                Program.ModeSelect(stringBuilder.ToString());
-
+                Program.ExceptionHandler("System.FormatException", "int型でない値が入力されました");
             }
         }
 
