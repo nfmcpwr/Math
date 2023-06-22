@@ -13,7 +13,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "2.0.20";
+        public static string version = "2.1.20";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -49,6 +49,7 @@ namespace math
             Console.WriteLine("5 : 不定積分");
             Console.WriteLine("6 : 定積分");
             Console.WriteLine("7 : 計算練習");
+            Console.WriteLine("8 : 辞書モード");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
@@ -60,7 +61,7 @@ namespace math
                 Console.WriteLine("1001 : 設定用キーの取得");
                 Console.WriteLine("1002 : Google Classroomを開く");
                 Console.WriteLine("1003 : チャートを開く");
-                Console.WriteLine("1004 : 辞書モード");
+                //Console.WriteLine("1004 : 辞書モード");
                 Console.WriteLine();
             }
 
@@ -179,8 +180,9 @@ namespace math
                 string key = DataManager.Activity.File.ReadFileActivity("math", "chartlogin.key");
                 OpenUrl("https://sviewer.jp/books/index.html?name=" + name + "&password=" + key);
             }
-            else if (Mode == 1004 && Global.devmode == true)
+            else if (Mode == 8)
             {
+                //辞書モード
                 DicMode();
             }
             else
@@ -235,9 +237,31 @@ namespace math
                 }
                 catch (FileNotFoundException)
                 {
+                    Console.WriteLine();
                     Console.WriteLine("単語が辞書に登録されていません");
-                    Console.ReadLine();
-                    DicMode();
+                    Console.Write("辞書データを追加しますか?(y/n):");
+                    string t = Console.ReadLine();
+                    if (t == "y")
+                    {
+                        ProcessStartInfo processStartInfo = new ProcessStartInfo()
+                        {
+                            FileName = "adddicdata.bat",
+                            UseShellExecute = true,
+                            //Arguments = "adddicdata.bat"
+                            //WorkingDirectory = ".\\dicdata"
+                        };
+
+                        Process.Start(processStartInfo).WaitForExit();
+                        
+                        
+                        //Process.Start(".\\dicdata\\newdicdata.exe").WaitForExit();
+                        DicMode();
+                    }
+                    else
+                    {
+                        DicMode();
+                    }
+                    
                 }
             }
 
