@@ -8,12 +8,13 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using MathNet.Numerics;
 
 namespace math
 {
     class Global
     {
-        public static string version = "2.1.20";
+        public static string version = "2.2.21";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -50,6 +51,9 @@ namespace math
             Console.WriteLine("6 : 定積分");
             Console.WriteLine("7 : 計算練習");
             Console.WriteLine("8 : 辞書モード");
+            Console.WriteLine("9 : 定積分(MathNet.Numerics.Integrate.GaussKronrod使用),(開発中)");
+            Console.WriteLine("10 : 三角比の値");
+            Console.WriteLine("11 : 平方根の値");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
@@ -143,6 +147,20 @@ namespace math
                 {
                     ExceptionHandler("System.FormatException", "int型以外の値が入力されました");
                 }
+            }
+            else if (Mode == 9)
+            {
+                Calc.Mode9();
+            }
+            else if (Mode == 10)
+            {
+                //三角比の値
+                Calc.Mode10();
+            }
+            else if (Mode == 11)
+            {
+                //平方根の値
+                Calc.Mode11();
             }
             
             
@@ -1225,6 +1243,63 @@ namespace math
                     return false; //エラー回避用
                 }
             } 
+        }
+
+        public static void Mode9() //testing
+        {
+            int a = 1;
+            int b = 3;
+            double result = Integrate.GaussKronrod(x => (x * x) + 2 * x + 1, a, b);
+            Program.ModeSelect(Convert.ToString(result));
+        }
+
+        public static void Mode10()
+        {
+            Console.WriteLine("Selected Mode:10");
+            Console.WriteLine("操作を選択");
+            Console.WriteLine("s : Sin");
+            Console.WriteLine("c : Cos");
+            Console.WriteLine("t : Tan");
+            Console.WriteLine();
+            Console.Write("Input:");
+            string mode = Console.ReadLine();
+            Console.WriteLine();
+            Console.Write("角度を入力:");
+            int kaku = int.Parse(Console.ReadLine());
+
+            double ans;
+
+            if (mode == "s")
+            {
+                double rad = (kaku / 180) * Math.PI;
+                ans = Math.Sin(rad);
+            }
+            else if (mode == "c")
+            {
+                double rad = (kaku / 180) * Math.PI;
+                ans = Math.Cos(rad);
+            }
+            else if (mode == "t")
+            {
+                double rad = (kaku / 180) * Math.PI;
+                ans = Math.Tan(rad);
+            }
+            else
+            {
+                ans = 0; //エラー回避
+            }
+            
+
+            Program.ModeSelect(Convert.ToString(ans));
+        }
+
+        public static void Mode11()
+        {
+            Console.WriteLine("Selected Mode:11");
+            Console.Write("ルートの中の値:");
+            int val = int.Parse(Console.ReadLine());
+            double ans = Math.Sqrt(val);
+            Program.ModeSelect(Convert.ToString(ans));
         }
     }
 }

@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>nfmcpwr</Authors>
     <Company />
-    <Version>2.1.20</Version>
+    <Version>2.2.21</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +16,10 @@
 
   <ItemGroup>
     <Folder Include="dicdata\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
