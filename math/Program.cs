@@ -14,7 +14,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "2.3.21";
+        public static string version = "2.4.21";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -54,6 +54,7 @@ namespace math
             Console.WriteLine("9 : 定積分(MathNet.Numerics.Integrate.GaussKronrod使用)");
             Console.WriteLine("10 : 三角比の値");
             Console.WriteLine("11 : 平方根の値");
+            Console.WriteLine("12 : 小数 -> 分数変換");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
@@ -150,6 +151,7 @@ namespace math
             }
             else if (Mode == 9)
             {
+                //mathnet 定積分
                 Calc.Mode9();
             }
             else if (Mode == 10)
@@ -161,6 +163,15 @@ namespace math
             {
                 //平方根の値
                 Calc.Mode11();
+            }
+            else if (Mode == 12)
+            {
+                Console.WriteLine("Selected Mode:12");
+                Console.WriteLine("注意:このメソッドで求められる値は近似値です。正確な値にならない場合があります");
+                Console.Write("値:");
+                double value = double.Parse(Console.ReadLine());
+                Calc.flaction.Fraction fraction = Calc.flaction.ConvertToFraction(value);
+                ModeSelect($"{fraction.Numerator} / {fraction.Denominator}");
             }
             
             
@@ -1515,6 +1526,51 @@ namespace math
             int val = int.Parse(Console.ReadLine());
             double ans = Math.Sqrt(val);
             Program.ModeSelect(Convert.ToString(ans));
+        }
+
+        public class flaction
+        {
+            public static Fraction ConvertToFraction(double decimalNumber)
+            {
+                const double tolerance = 1.0E-6;
+                double numerator = 1;
+                double denominator = 1;
+                double fractionValue = numerator / denominator;
+
+                while (Math.Abs(fractionValue - decimalNumber) > tolerance)
+                {
+                    if (fractionValue < decimalNumber)
+                    {
+                        numerator++;
+                    }
+                    else
+                    {
+                        denominator++;
+                        numerator = decimalNumber * denominator;
+                    }
+                    fractionValue = numerator / denominator;
+                }
+
+                return new Fraction((int)numerator, (int)denominator);
+            }
+        
+
+            public struct Fraction
+            {
+                public int Numerator { get; }
+                public int Denominator { get; }
+
+                public Fraction(int numerator, int denominator)
+                {
+                    Numerator = numerator;
+                    Denominator = denominator;
+                }
+            }
+        }
+
+        public static void Mode13()
+        {
+
         }
     }
 }
