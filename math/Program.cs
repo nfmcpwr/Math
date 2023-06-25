@@ -14,7 +14,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "2.2.21";
+        public static string version = "2.3.21";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -51,7 +51,7 @@ namespace math
             Console.WriteLine("6 : 定積分");
             Console.WriteLine("7 : 計算練習");
             Console.WriteLine("8 : 辞書モード");
-            Console.WriteLine("9 : 定積分(MathNet.Numerics.Integrate.GaussKronrod使用),(開発中)");
+            Console.WriteLine("9 : 定積分(MathNet.Numerics.Integrate.GaussKronrod使用)");
             Console.WriteLine("10 : 三角比の値");
             Console.WriteLine("11 : 平方根の値");
             Console.WriteLine("------------------------------");
@@ -1245,12 +1245,227 @@ namespace math
             } 
         }
 
-        public static void Mode9() //testing
+        public static void Mode9() 
         {
-            int a = 1;
-            int b = 3;
-            double result = Integrate.GaussKronrod(x => (x * x) + 2 * x + 1, a, b);
-            Program.ModeSelect(Convert.ToString(result));
+
+            Console.WriteLine("Selected Mode:9");
+            //int u = 1;
+            //int y = 3;
+            //double result = Integrate.GaussKronrod(x => Math.Pow(x,2) + 2 * x + 1, u, y);
+            //Program.ModeSelect(Convert.ToString(result));
+
+            Console.Write("項数を入力:");
+            int kousuu = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+            if (kousuu == 1)
+            {
+                Console.WriteLine("ax^p");
+                Console.Write("a:");
+                int a = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("p:");
+                int p = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //積分区間入力
+                Console.WriteLine("積分区間入力");
+                Console.WriteLine("b ");
+                Console.WriteLine("∫f(x) dx");
+                Console.WriteLine("a ");
+                Console.WriteLine();
+                Console.Write("b:");
+                int kukanb = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("a:");
+                int kukana = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //計算
+                double result = Integrate.GaussKronrod(x => a * Math.Pow(x,p), kukana, kukanb);
+                Program.ModeSelect(Convert.ToString(result));
+
+
+            }
+            else if (kousuu == 2)
+            {
+                Console.WriteLine("ax^p + bx^q");
+                Console.Write("a:");
+                int a = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("p:");
+                int p = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("b:");
+                int b = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("q:");
+                int q = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //積分区間入力
+                Console.WriteLine("積分区間入力");
+                Console.WriteLine("b ");
+                Console.WriteLine("∫f(x) dx");
+                Console.WriteLine("a ");
+                Console.WriteLine();
+                Console.Write("b:");
+                int kukanb = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("a:");
+                int kukana = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //計算
+                double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)), kukana, kukanb);
+                Program.ModeSelect(Convert.ToString(result));
+
+
+
+            }
+            else if (kousuu == 3)
+            {
+                Console.WriteLine("ax^p + bx^q + cx^r");
+                Console.Write("a:");
+                int a = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("p:");
+                int p = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("b:");
+                int b = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("q:");
+                int q = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("c:");
+                int c = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("r:");
+                int r = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //積分区間入力
+                Console.WriteLine("積分区間入力");
+                Console.WriteLine("b ");
+                Console.WriteLine("∫f(x) dx");
+                Console.WriteLine("a ");
+                Console.WriteLine();
+                Console.Write("b:");
+                int kukanb = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("a:");
+                int kukana = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //計算
+                double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)), kukana, kukanb);
+                Program.ModeSelect(Convert.ToString(result));
+
+
+
+            }
+            else if (kousuu == 4)
+            {
+                Console.WriteLine("ax^p + bx^q + cx^r + dx^s");
+                Console.Write("a:");
+                int a = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("p:");
+                int p = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("b:");
+                int b = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("q:");
+                int q = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("c:");
+                int c = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("r:");
+                int r = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("d:");
+                int d = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("s:");
+                int s = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //積分区間入力
+                Console.WriteLine("積分区間入力");
+                Console.WriteLine("b ");
+                Console.WriteLine("∫f(x) dx");
+                Console.WriteLine("a ");
+                Console.WriteLine();
+                Console.Write("b:");
+                int kukanb = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("a:");
+                int kukana = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //計算
+                double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)) + (d * Math.Pow(x, s)), kukana, kukanb);
+                Program.ModeSelect(Convert.ToString(result));
+
+
+
+            }
+            else if (kousuu == 5)
+            {
+                Console.WriteLine("ax^p + bx^q + cx^r + dx^s + ex^t");
+                Console.Write("a:");
+                int a = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("p:");
+                int p = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("b:");
+                int b = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("q:");
+                int q = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("c:");
+                int c = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("r:");
+                int r = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("d:");
+                int d = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("s:");
+                int s = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("e:");
+                int e = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("t:");
+                int t = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //積分区間入力
+                Console.WriteLine("積分区間入力");
+                Console.WriteLine("b ");
+                Console.WriteLine("∫f(x) dx");
+                Console.WriteLine("a ");
+                Console.WriteLine();
+                Console.Write("b:");
+                int kukanb = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("a:");
+                int kukana = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                //計算
+                double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)) + (d * Math.Pow(x, s)) + (e * Math.Pow(x, t)), kukana, kukanb);
+                Program.ModeSelect(Convert.ToString(result));
+
+
+
+            }
         }
 
         public static void Mode10()
