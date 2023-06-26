@@ -44,7 +44,6 @@ namespace math
             Console.WriteLine("操作を選択");
             Console.WriteLine("1 : 文字を含まない計算");
             Console.WriteLine("2 : 微分");
-            //Console.WriteLine("2 : 文字を含まない計算(小数を含む)");
             Console.WriteLine("3 : 1次式の解");
             Console.WriteLine("4 : 2次式の解");
             Console.WriteLine("5 : 不定積分");
@@ -55,6 +54,10 @@ namespace math
             Console.WriteLine("10 : 三角比の値");
             Console.WriteLine("11 : 平方根の値");
             Console.WriteLine("12 : 小数 -> 分数変換");
+            Console.WriteLine("13 : 累乗");
+            Console.WriteLine("14 : 最大公約数");
+            Console.WriteLine("15 : 最小公倍数");
+            Console.WriteLine("16 : 平均値");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
@@ -167,12 +170,33 @@ namespace math
             else if (Mode == 12)
             {
                 Console.WriteLine("Selected Mode:12");
-                Console.WriteLine("注意:このメソッドで求められる値は近似値です。正確な値にならない場合があります");
                 Console.Write("値:");
                 double value = double.Parse(Console.ReadLine());
-                Calc.flaction.Fraction fraction = Calc.flaction.ConvertToFraction(value);
+                Calc.Flaction.Fraction fraction = Calc.Flaction.ConvertToFraction(value);
                 ModeSelect($"{fraction.Numerator} / {fraction.Denominator}");
             }
+            else if (Mode == 13) 
+            {
+                //累乗
+                Calc.Mode13();
+            }
+            else if (Mode == 14)
+            {
+                //最大公約数
+                Calc.Mode14();
+            }
+            else if (Mode == 15)
+            {
+                //最小公倍数
+                Calc.Mode15();
+            }
+            else if (Mode == 16)
+            {
+                //平均値
+                Calc.Mode16();
+            }
+
+            
             
             
 
@@ -1528,7 +1552,7 @@ namespace math
             Program.ModeSelect(Convert.ToString(ans));
         }
 
-        public class flaction
+        public class Flaction
         {
             public static Fraction ConvertToFraction(double decimalNumber)
             {
@@ -1570,7 +1594,69 @@ namespace math
 
         public static void Mode13()
         {
+            Console.WriteLine("Selected Mode:13");
+            Console.WriteLine("a^n");
+            Console.Write("a:");
+            int a = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+            Console.Write("n:");
+            int n = int.Parse(Console.ReadLine());
+            string ans = Convert.ToString(Math.Pow(a,n));
+            Program.ModeSelect(ans);
+        }
 
+        public static void Mode14()
+        {
+            Console.WriteLine("Selected Mode:14");
+            Console.Write("値の数:");
+            int num = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+            long[] value = new long[num];
+            for (int i = 0; i <= num - 1; i++)
+            {
+                Console.Write(i + "番目:");
+                value[i] = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+            }
+
+            long ans = Euclid.GreatestCommonDivisor(value);
+            Program.ModeSelect(Convert.ToString(ans));
+        }
+
+        public static void Mode15()
+        {
+            Console.WriteLine("Selected Mode:15");
+            Console.Write("値の数:");
+            int num = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+            long[] value = new long[num];
+            for (int i = 0; i <= num - 1; i++)
+            {
+                Console.Write(i + "番目:");
+                value[i] = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+            }
+
+            long ans = Euclid.LeastCommonMultiple(value);
+            Program.ModeSelect(Convert.ToString(ans));
+        }
+
+        public static void Mode16()
+        {
+            Console.WriteLine("Selected Mode:16");
+            Console.Write("値の数:");
+            int num = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+            long[] value = new long[num];
+            for (int i = 0; i <= num - 1; i++)
+            {
+                Console.Write(i + "番目:");
+                value[i] = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+            }
+            
+            double avg = value.Average();
+            Program.ModeSelect(Convert.ToString(avg));
         }
     }
 }
