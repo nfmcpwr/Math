@@ -14,7 +14,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "2.4.21";
+        public static string version = "2.8.21";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;

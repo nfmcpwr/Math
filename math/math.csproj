@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>nfmcpwr</Authors>
     <Company />
-    <Version>2.4.21</Version>
+    <Version>2.8.21</Version>
   </PropertyGroup>
 
   <ItemGroup>
