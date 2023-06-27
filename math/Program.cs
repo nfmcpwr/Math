@@ -9,12 +9,13 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using MathNet.Numerics;
+using MathNet.Numerics.Statistics;
 
 namespace math
 {
     class Global
     {
-        public static string version = "2.4.21";
+        public static string version = "2.8.31";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -57,7 +58,7 @@ namespace math
             Console.WriteLine("13 : 累乗");
             Console.WriteLine("14 : 最大公約数");
             Console.WriteLine("15 : 最小公倍数");
-            Console.WriteLine("16 : 平均値");
+            Console.WriteLine("16 : データ");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
@@ -192,7 +193,7 @@ namespace math
             }
             else if (Mode == 16)
             {
-                //平均値
+                //データ
                 Calc.Mode16();
             }
 
@@ -1647,7 +1648,7 @@ namespace math
             Console.Write("値の数:");
             int num = int.Parse(Console.ReadLine());
             Console.WriteLine();
-            long[] value = new long[num];
+            double[] value = new double[num];
             for (int i = 0; i <= num - 1; i++)
             {
                 Console.Write(i + "番目:");
@@ -1655,8 +1656,14 @@ namespace math
                 Console.WriteLine();
             }
             
-            double avg = value.Average();
-            Program.ModeSelect(Convert.ToString(avg));
+            Console.WriteLine("平均値  : " + value.Average());
+            Console.WriteLine("第1四分位数 : " + value.Percentile(25));
+            Console.WriteLine("中央値 : " + value.Median());
+            Console.WriteLine("第3四分位数 : " + value.Percentile(75));
+            Console.WriteLine("分散 : " + value.PopulationVariance());
+            Console.WriteLine("標準偏差 : " + value.PopulationStandardDeviation());
+            Program.ModeSelect("");
+            //Program.ModeSelect(Convert.ToString(avg));
         }
     }
 }
