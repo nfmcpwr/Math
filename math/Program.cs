@@ -10,12 +10,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MathNet.Numerics;
 using MathNet.Numerics.Statistics;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace math
 {
     class Global
     {
-        public static string version = "2.8.31";
+        public static string version = "2.9.53";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -37,7 +39,6 @@ namespace math
 
             if (Global.devmode == true)
             {
-                Console.WriteLine("開発者モード有効");
                 Console.WriteLine();
 
             }
@@ -59,6 +60,7 @@ namespace math
             Console.WriteLine("14 : 最大公約数");
             Console.WriteLine("15 : 最小公倍数");
             Console.WriteLine("16 : データ");
+            Console.WriteLine("17 : 関数グラフ");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
@@ -195,6 +197,11 @@ namespace math
             {
                 //データ
                 Calc.Mode16();
+            }
+            else if (Mode == 17)
+            {
+                //グラフ
+                Calc.Mode17();
             }
 
             
@@ -1664,6 +1671,13 @@ namespace math
             Console.WriteLine("標準偏差 : " + value.PopulationStandardDeviation());
             Program.ModeSelect("");
             //Program.ModeSelect(Convert.ToString(avg));
+        }
+
+        public static void Mode17()
+        {
+            Console.WriteLine("Selected Mode:17");
+            Process.Start("./graphwriter.exe").WaitForExit();
+            Program.ModeSelect("");
         }
     }
 }
