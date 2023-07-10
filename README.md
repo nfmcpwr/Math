@@ -20,3 +20,7 @@
   
   ## 全モード分数計算不可
   あとは使えばわかる
+
+<br>
+   ## .NET Core 3.1 必須
+   https://dotnet.microsoft.com/en-us/download/dotnet/3.1
