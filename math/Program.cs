@@ -10,14 +10,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MathNet.Numerics;
 using MathNet.Numerics.Statistics;
-using System.Drawing;
-using System.Windows.Forms;
+//using System.Drawing;
+//using System.Windows.Forms;
 
 namespace math
 {
     class Global
     {
-        public static string version = "2.9.55";
+        public static string version = "3.1.05";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -1304,10 +1304,10 @@ namespace math
             {
                 Console.WriteLine("ax^p");
                 Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
+                double a = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
+                double p = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //積分区間入力
@@ -1317,10 +1317,10 @@ namespace math
                 Console.WriteLine("a ");
                 Console.WriteLine();
                 Console.Write("b:");
-                int kukanb = int.Parse(Console.ReadLine());
+                double kukanb = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("a:");
-                int kukana = int.Parse(Console.ReadLine());
+                double kukana = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //計算
@@ -1333,16 +1333,16 @@ namespace math
             {
                 Console.WriteLine("ax^p + bx^q");
                 Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
+                double a = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
+                double p = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
+                double b = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
+                double q = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //積分区間入力
@@ -1352,10 +1352,10 @@ namespace math
                 Console.WriteLine("a ");
                 Console.WriteLine();
                 Console.Write("b:");
-                int kukanb = int.Parse(Console.ReadLine());
+                double kukanb = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("a:");
-                int kukana = int.Parse(Console.ReadLine());
+                double kukana = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //計算
@@ -1369,22 +1369,22 @@ namespace math
             {
                 Console.WriteLine("ax^p + bx^q + cx^r");
                 Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
+                double a = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
+                double p = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
+                double b = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
+                double q = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
+                double c = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
+                double r = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //積分区間入力
@@ -1394,10 +1394,10 @@ namespace math
                 Console.WriteLine("a ");
                 Console.WriteLine();
                 Console.Write("b:");
-                int kukanb = int.Parse(Console.ReadLine());
+                double kukanb = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("a:");
-                int kukana = int.Parse(Console.ReadLine());
+                double kukana = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //計算
@@ -1411,28 +1411,28 @@ namespace math
             {
                 Console.WriteLine("ax^p + bx^q + cx^r + dx^s");
                 Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
+                double a = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
+                double p = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
+                double b = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
+                double q = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
+                double c = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
+                double r = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("d:");
-                int d = int.Parse(Console.ReadLine());
+                double d = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("s:");
-                int s = int.Parse(Console.ReadLine());
+                double s = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //積分区間入力
@@ -1442,10 +1442,10 @@ namespace math
                 Console.WriteLine("a ");
                 Console.WriteLine();
                 Console.Write("b:");
-                int kukanb = int.Parse(Console.ReadLine());
+                double kukanb = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("a:");
-                int kukana = int.Parse(Console.ReadLine());
+                double kukana = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //計算
@@ -1459,34 +1459,34 @@ namespace math
             {
                 Console.WriteLine("ax^p + bx^q + cx^r + dx^s + ex^t");
                 Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
+                double a = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
+                double p = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
+                double b = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
+                double q = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
+                double c = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
+                double r = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("d:");
-                int d = int.Parse(Console.ReadLine());
+                double d = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("s:");
-                int s = int.Parse(Console.ReadLine());
+                double s = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("e:");
-                int e = int.Parse(Console.ReadLine());
+                double e = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("t:");
-                int t = int.Parse(Console.ReadLine());
+                double t = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //積分区間入力
@@ -1496,10 +1496,10 @@ namespace math
                 Console.WriteLine("a ");
                 Console.WriteLine();
                 Console.Write("b:");
-                int kukanb = int.Parse(Console.ReadLine());
+                double kukanb = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("a:");
-                int kukana = int.Parse(Console.ReadLine());
+                double kukana = double.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 //計算
