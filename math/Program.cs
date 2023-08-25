@@ -96,11 +96,13 @@ namespace math
             }
             catch(OverflowException)
             {
-                ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
+                Exception e = new OverflowException();
+                ExceptionHandler("System.OverflowException", e);
             }
             catch (FormatException)
             {
-                ExceptionHandler("System.FormatException", "int型以外の値が入力されました");
+                Exception e = new FormatException();
+                ExceptionHandler("System.FormatException", e);
             }
         }
 
@@ -148,11 +150,13 @@ namespace math
                 }
                 catch (OverflowException)
                 {
-                    ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
+                    Exception e = new OverflowException();
+                    ExceptionHandler("System.OverflowException", e);
                 }
                 catch (FormatException)
                 {
-                    ExceptionHandler("System.FormatException", "int型以外の値が入力されました");
+                    Exception e = new FormatException();
+                    ExceptionHandler("System.FormatException", e);
                 }
             }
             else if (Mode == 9)
@@ -172,11 +176,12 @@ namespace math
             }
             else if (Mode == 12)
             {
-                Console.WriteLine("Selected Mode:12");
+                //小数 -> 分数
+                /*Console.WriteLine("Mode12");
                 Console.Write("値:");
                 double value = double.Parse(Console.ReadLine());
                 Calc.Flaction.Fraction fraction = Calc.Flaction.ConvertToFraction(value);
-                ModeSelect($"{fraction.Numerator} / {fraction.Denominator}");
+                ModeSelect($"{fraction.Numerator} / {fraction.Denominator}");*/
             }
             else if (Mode == 13) 
             {
@@ -388,14 +393,16 @@ namespace math
             
         }
 
-        public static void ExceptionHandler(string Exception,string d)
+        public static void ExceptionHandler(string exception,Exception e)
         {
             Console.Clear();
             Console.WriteLine("ExceptionHandler");
             Console.WriteLine("version: " + Global.version);
-            Console.WriteLine("内容: " + Exception);
+            Console.WriteLine("内容: " + exception);
             Console.WriteLine();
-            Console.WriteLine(d);
+            Console.WriteLine(e.Message);
+            Console.WriteLine();
+            Console.Write("Enterで終了");
             Console.ReadLine();
         }
 
@@ -437,7 +444,7 @@ namespace math
     {
         public static void Mode1()
         {
-            Console.WriteLine("Selected Mode:1");
+            Console.WriteLine("Mode1");
             Console.WriteLine("数式を入力");
             Console.Write("Input:");
             try
@@ -449,13 +456,14 @@ namespace math
             }
             catch (EvaluateException)
             {
-                Program.ExceptionHandler("System.Data.EvaluateException","値に文字が含まれています");
+                Exception e = new EvaluateException();
+                Program.ExceptionHandler("System.Data.EvaluateException", e);
             }
         }
 
         /*public static void Mode2()
         {
-            Console.WriteLine("Selected Mode:2");
+            Console.WriteLine("Mode2");
             Console.WriteLine("数式を入力");
             Console.Write("Input:");
             string Input = Console.ReadLine();
@@ -466,7 +474,7 @@ namespace math
 
         public static void Mode3()
         {
-            Console.WriteLine("Selected Mode:3");
+            Console.WriteLine("Mode3");
             Console.WriteLine("ax + b = c");
             Console.Write("a:");
             try
@@ -485,18 +493,20 @@ namespace math
             }
             catch(OverflowException)
             {
-                Program.ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
+                Exception e = new OverflowException();
+                Program.ExceptionHandler("System.OverflowException", e);
             }
             catch (FormatException)
             {
-                Program.ExceptionHandler("System.FormatException", "int型でない値が入力されました");
+                Exception e = new FormatException();
+                Program.ExceptionHandler("System.FormatException", e);
             }
 
         }
 
         public static void Mode4()
         {
-            Console.WriteLine("Selected Mode:4");
+            Console.WriteLine("Mode4");
             Console.WriteLine("ax^2 + bx + c = 0");
             Console.Write("a:");
             try
@@ -523,11 +533,13 @@ namespace math
             }
             catch(OverflowException)
             {
-                Program.ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
+                Exception e = new OverflowException();
+                Program.ExceptionHandler("System.OverflowException", e);
             }
             catch (FormatException)
             {
-                Program.ExceptionHandler("System.FormatException", "int型でない値が入力されました");
+                Exception e = new FormatException();
+                Program.ExceptionHandler("System.FormatException", e);
             }
         }
 
@@ -538,11 +550,11 @@ namespace math
 
                 if (Tei == true)
             {
-                Console.WriteLine("Selected Mode:6");
+                Console.WriteLine("Mode6");
             }
             else
             {
-                Console.WriteLine("Selected Mode:5");
+                Console.WriteLine("Mode5");
             }
 
             Console.Write("項数を入力:");
@@ -737,11 +749,13 @@ namespace math
         }
             catch (FormatException)
             {
-                Program.ExceptionHandler("System.FormatException", "int型でない値が入力されました");
+                Exception e = new FormatException();
+                Program.ExceptionHandler("System.FormatException", e);
             }
             catch(OverflowException)
             {
-                Program.ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
+                Exception e = new OverflowException();
+                Program.ExceptionHandler("System.OverflowException", e);
             }
         }
 
@@ -808,7 +822,7 @@ namespace math
 
         public static void Mode2() //微分
         {
-            Console.WriteLine("Selected Mode:2");
+            Console.WriteLine("Mode2");
             try
             {
 
@@ -1143,11 +1157,15 @@ namespace math
             } 
             catch (OverflowException)
             {
-                Program.ExceptionHandler("System.OverflowException", "値がintの規定値を超えています");
+                Exception e = new OverflowException();
+                Program.ExceptionHandler("System.OverflowException", e);
             }
             catch (FormatException)
             {
-                Program.ExceptionHandler("System.FormatException", "int型でない値が入力されました");
+                Exception e = new FormatException();
+                Program.ExceptionHandler("System.FormatException", e);
+                
+                
             }
         }
 
@@ -1291,7 +1309,7 @@ namespace math
         public static void Mode9() 
         {
 
-            Console.WriteLine("Selected Mode:9");
+            Console.WriteLine("Mode9");
             //int u = 1;
             //int y = 3;
             //double result = Integrate.GaussKronrod(x => Math.Pow(x,2) + 2 * x + 1, u, y);
@@ -1513,7 +1531,7 @@ namespace math
 
         public static void Mode10()
         {
-            Console.WriteLine("Selected Mode:10");
+            Console.WriteLine("Mode10");
             Console.WriteLine("操作を選択");
             Console.WriteLine("s : Sin");
             Console.WriteLine("c : Cos");
@@ -1553,14 +1571,14 @@ namespace math
 
         public static void Mode11()
         {
-            Console.WriteLine("Selected Mode:11");
+            Console.WriteLine("Mode11");
             Console.Write("ルートの中の値:");
             int val = int.Parse(Console.ReadLine());
             double ans = Math.Sqrt(val);
             Program.ModeSelect(Convert.ToString(ans));
         }
 
-        public class Flaction
+        /*public class Flaction
         {
             public static Fraction ConvertToFraction(double decimalNumber)
             {
@@ -1598,11 +1616,19 @@ namespace math
                     Denominator = denominator;
                 }
             }
+        }*/
+
+        public static void Mode12()
+        {
+            using (StreamReader reader = new StreamReader("data\\convrule.txt"))
+            {
+
+            }
         }
 
         public static void Mode13()
         {
-            Console.WriteLine("Selected Mode:13");
+            Console.WriteLine("Mode13");
             Console.WriteLine("a^n");
             Console.Write("a:");
             int a = int.Parse(Console.ReadLine());
@@ -1615,7 +1641,7 @@ namespace math
 
         public static void Mode14()
         {
-            Console.WriteLine("Selected Mode:14");
+            Console.WriteLine("Mode14");
             Console.Write("値の数:");
             int num = int.Parse(Console.ReadLine());
             Console.WriteLine();
@@ -1633,7 +1659,7 @@ namespace math
 
         public static void Mode15()
         {
-            Console.WriteLine("Selected Mode:15");
+            Console.WriteLine("Mode15");
             Console.Write("値の数:");
             int num = int.Parse(Console.ReadLine());
             Console.WriteLine();
@@ -1651,7 +1677,7 @@ namespace math
 
         public static void Mode16()
         {
-            Console.WriteLine("Selected Mode:16");
+            Console.WriteLine("Mode16");
             Console.Write("値の数:");
             int num = int.Parse(Console.ReadLine());
             Console.WriteLine();
@@ -1675,7 +1701,7 @@ namespace math
 
         public static void Mode17()
         {
-            Console.WriteLine("Selected Mode:17");
+            Console.WriteLine("Mode17");
             Process.Start("./graphwriter.exe").WaitForExit();
             Program.ModeSelect("");
         }

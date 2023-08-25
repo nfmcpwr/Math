@@ -28,12 +28,16 @@
 
   <ItemGroup>
     <Reference Include="DataManager">
-      <HintPath>DataManager.dll</HintPath>
+      <HintPath>lib\DataManager.dll</HintPath>
+    </Reference>
+    <Reference Include="FractionLib">
+      <HintPath>lib\FractionLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="dicdata\" />
+    <Folder Include="data\dic\" />
+    <Folder Include="data\" />
   </ItemGroup>
 
   <ItemGroup>
