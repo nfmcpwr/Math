@@ -177,11 +177,32 @@ namespace math
             else if (Mode == 12)
             {
                 //小数 -> 分数
-                /*Console.WriteLine("Mode12");
-                Console.Write("値:");
-                double value = double.Parse(Console.ReadLine());
-                Calc.Flaction.Fraction fraction = Calc.Flaction.ConvertToFraction(value);
-                ModeSelect($"{fraction.Numerator} / {fraction.Denominator}");*/
+                Console.WriteLine("Mode12");
+                Console.WriteLine("モード選択");
+                Console.WriteLine("1 : old(非推奨)");
+                Console.WriteLine("2 : table");
+                Console.WriteLine("3 : new");
+                Console.Write(":");
+                string m = Console.ReadLine();
+                if (m == "1")
+                {
+                    Console.Write("値:");
+                    double value = double.Parse(Console.ReadLine());
+                    Calc.Flaction.Fraction fraction = Calc.Flaction.ConvertToFraction(value);
+                    ModeSelect($"{fraction.Numerator} / {fraction.Denominator}");
+                }
+                else if (m == "2")
+                {
+                    Calc.Mode12_1();
+                }
+                else if (m == "3")
+                {
+                    Calc.Mode12_2();
+                }
+                else
+                {
+                    ModeSelect("");
+                }
             }
             else if (Mode == 13) 
             {
@@ -1578,7 +1599,7 @@ namespace math
             Program.ModeSelect(Convert.ToString(ans));
         }
 
-        /*public class Flaction
+        public class Flaction
         {
             public static Fraction ConvertToFraction(double decimalNumber)
             {
@@ -1616,14 +1637,19 @@ namespace math
                     Denominator = denominator;
                 }
             }
-        }*/
+        }
 
-        public static void Mode12()
+        public static void Mode12_1()
         {
             using (StreamReader reader = new StreamReader("data\\convrule.txt"))
             {
 
             }
+        }
+        
+        public static void Mode12_2()
+        {
+            
         }
 
         public static void Mode13()
