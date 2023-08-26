@@ -5,6 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -17,7 +20,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "3.1.05";
+        public static string version = "3.4.16";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -69,7 +72,7 @@ namespace math
 
             if (Global.devmode == true)
             {
-                Console.WriteLine("1001 : 設定用キーの取得");
+                Console.WriteLine("1001 : チャート設定");
                 Console.WriteLine("1002 : Google Classroomを開く");
                 Console.WriteLine("1003 : チャートを開く");
                 //Console.WriteLine("1004 : 辞書モード");
@@ -94,15 +97,15 @@ namespace math
                     CheckMode(SelectedMode);
                 }
             }
-            catch(OverflowException)
+            catch(OverflowException e)
             {
-                Exception e = new OverflowException();
-                ExceptionHandler("System.OverflowException", e);
+                //Exception e = new OverflowException();
+                ExceptionHandler(e.ToString(), e);
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
-                Exception e = new FormatException();
-                ExceptionHandler("System.FormatException", e);
+                //Exception e = new FormatException();
+                ExceptionHandler(e.ToString(), e);
             }
         }
 
@@ -144,20 +147,10 @@ namespace math
             else if (Mode == 7)
             {
                 //計算練習
-                try
-                {
+                
+                
                     Calc.Mode7();
-                }
-                catch (OverflowException)
-                {
-                    Exception e = new OverflowException();
-                    ExceptionHandler("System.OverflowException", e);
-                }
-                catch (FormatException)
-                {
-                    Exception e = new FormatException();
-                    ExceptionHandler("System.FormatException", e);
-                }
+                
             }
             else if (Mode == 9)
             {
@@ -429,6 +422,17 @@ namespace math
 
         static void Main(string[] args)
         {
+            Console.Title = "Math " + Global.version;
+
+            /*AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
+            {
+                string assemblyPath = Path.Combine("lib", "DataManager.dll");
+                return Assembly.LoadFrom(assemblyPath);
+            };
+            /*Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory,"lib","DataManager.dll"));
+            Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, "lib", "FractionLib.dll"));
+            Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, "lib", "MathNet.Numerics.dll"));*/
+            
             DataManager.Activity.Root.CheckRootDirActivity();
             DataManager.Activity.CheckDirectoryActivity("math");
             DataManager.Activity.CheckFileActivity("math", "chartlogin.id");
@@ -475,10 +479,10 @@ namespace math
                 var Result = dataTable.Compute(Input, "");
                 Program.ModeSelect(Convert.ToString(Result));
             }
-            catch (EvaluateException)
+            catch (EvaluateException e)
             {
-                Exception e = new EvaluateException();
-                Program.ExceptionHandler("System.Data.EvaluateException", e);
+                //Exception e = new EvaluateException();
+                Program.ExceptionHandler(e.ToString(), e);
             }
         }
 
@@ -512,15 +516,15 @@ namespace math
 
                 Program.ModeSelect(Convert.ToString(x));
             }
-            catch(OverflowException)
+            catch(OverflowException e)
             {
-                Exception e = new OverflowException();
-                Program.ExceptionHandler("System.OverflowException", e);
+                //Exception e = new OverflowException();
+                Program.ExceptionHandler(e.ToString(), e);
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
-                Exception e = new FormatException();
-                Program.ExceptionHandler("System.FormatException", e);
+                //Exception e = new FormatException();
+                Program.ExceptionHandler(e.ToString(), e);
             }
 
         }
@@ -552,15 +556,15 @@ namespace math
 
                 Program.ModeSelect(Result);
             }
-            catch(OverflowException)
+            catch(OverflowException e)
             {
-                Exception e = new OverflowException();
-                Program.ExceptionHandler("System.OverflowException", e);
+                //Exception e = new OverflowException();
+                Program.ExceptionHandler(e.ToString(), e);
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
-                Exception e = new FormatException();
-                Program.ExceptionHandler("System.FormatException", e);
+                //Exception e = new FormatException();
+                Program.ExceptionHandler(e.ToString(), e);
             }
         }
 
@@ -768,76 +772,83 @@ namespace math
                 }
             }
         }
-            catch (FormatException)
+            catch (FormatException e)
             {
-                Exception e = new FormatException();
-                Program.ExceptionHandler("System.FormatException", e);
+                //Exception e = new FormatException();
+                Program.ExceptionHandler(e.ToString(), e);
             }
-            catch(OverflowException)
+            catch(OverflowException e)
             {
-                Exception e = new OverflowException();
-                Program.ExceptionHandler("System.OverflowException", e);
+                //Exception e = new OverflowException();
+                Program.ExceptionHandler(e.ToString(), e);
             }
         }
 
         public static void Teiseki(int kousuu,string F1_1,int? F1_2,string F2_1,int? F2_2,string F3_1,int? F3_2,string F4_1,int? F4_2,string F5_1,int? F5_2) //ax^p + bx^q = a,p,b,q
         {
-            Console.WriteLine("積分区間の入力");
-            Console.WriteLine("b ");
-            Console.WriteLine("∫f(x) dx");
-            Console.WriteLine("a ");
-            Console.WriteLine();
-            Console.Write("b:");
-            int b = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            Console.Write("a:");
-            int a = int.Parse(Console.ReadLine());
-            Console.WriteLine();
+            try
+            {
+                Console.WriteLine("積分区間の入力");
+                Console.WriteLine("b ");
+                Console.WriteLine("∫f(x) dx");
+                Console.WriteLine("a ");
+                Console.WriteLine();
+                Console.Write("b:");
+                int b = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("a:");
+                int a = int.Parse(Console.ReadLine());
+                Console.WriteLine();
 
-            string answer;
+                string answer;
 
-            if (kousuu == 1)
-            {
-                answer = F1_1 + " * " + Math.Pow(b, (double)F1_2) + " - " + F1_1 + " * " + Math.Pow(a, (double)F1_2);
-            }
-            else if (kousuu == 2)
-            {
-                answer = "(" + F1_1 + " * " + Math.Pow(b, (double)F1_2) + F2_1 + " * " + Math.Pow(b, (double)F2_2) + ") - (" + F1_1 + " * " + Math.Pow(a, (double)F1_2) + F2_1 + " * " + Math.Pow(a, (double)F2_2) + ")";
-            }
-            else if (kousuu == 3)
-            {
-                answer = "(" + F1_1 + " * " + Math.Pow(b, (double)F1_2) + F2_1 + " * " + Math.Pow(b, (double)F2_2) + F3_1 + " * " + Math.Pow(b, (double)F3_2) + ") - (" + F1_1 + " * " + Math.Pow(a, (double)F1_2) + F2_1 + " * " + Math.Pow(a, (double)F2_2) + F3_1 + " * " + Math.Pow(a, (double)F3_2) + ")";
-            }
-            else if (kousuu == 4)
-            {
-                answer = "(" + F1_1 + " * " + Math.Pow(b, (double)F1_2) + F2_1 + " * " + Math.Pow(b, (double)F2_2) + F3_1 + " * " + Math.Pow(b, (double)F3_2) + F4_1 + " * " + Math.Pow(b, (double)F4_2) + ") - (" + F1_1 + " * " + Math.Pow(a, (double)F1_2) + F2_1 + " * " + Math.Pow(a, (double)F2_2) + F3_1 + " * " + Math.Pow(a, (double)F3_2) + F4_1 + " * " + Math.Pow(a, (double)F4_2) + ")";
-            }
-            else if (kousuu == 5)
-            {
-                answer = "(" + F1_1 + " * " + Math.Pow(b, (double)F1_2) + F2_1 + " * " + Math.Pow(b, (double)F2_2) + F3_1 + " * " + Math.Pow(b, (double)F3_2) + F4_1 + " * " + Math.Pow(b, (double)F4_2) + F5_1 + " * " + Math.Pow(b, (double)F5_2) + ") - (" + F1_1 + " * " + Math.Pow(a, (double)F1_2) + F2_1 + " * " + Math.Pow(a, (double)F2_2) + F3_1 + " * " + Math.Pow(a, (double)F3_2) + F4_1 + " * " + Math.Pow(a, (double)F4_2) + F5_1 + " * " + Math.Pow(a, (double)F5_2) + ")";
-            }
-            else
-            {
-                answer = "";
-            }
+                if (kousuu == 1)
+                {
+                    answer = F1_1 + " * " + Math.Pow(b, (double)F1_2) + " - " + F1_1 + " * " + Math.Pow(a, (double)F1_2);
+                }
+                else if (kousuu == 2)
+                {
+                    answer = "(" + F1_1 + " * " + Math.Pow(b, (double)F1_2) + F2_1 + " * " + Math.Pow(b, (double)F2_2) + ") - (" + F1_1 + " * " + Math.Pow(a, (double)F1_2) + F2_1 + " * " + Math.Pow(a, (double)F2_2) + ")";
+                }
+                else if (kousuu == 3)
+                {
+                    answer = "(" + F1_1 + " * " + Math.Pow(b, (double)F1_2) + F2_1 + " * " + Math.Pow(b, (double)F2_2) + F3_1 + " * " + Math.Pow(b, (double)F3_2) + ") - (" + F1_1 + " * " + Math.Pow(a, (double)F1_2) + F2_1 + " * " + Math.Pow(a, (double)F2_2) + F3_1 + " * " + Math.Pow(a, (double)F3_2) + ")";
+                }
+                else if (kousuu == 4)
+                {
+                    answer = "(" + F1_1 + " * " + Math.Pow(b, (double)F1_2) + F2_1 + " * " + Math.Pow(b, (double)F2_2) + F3_1 + " * " + Math.Pow(b, (double)F3_2) + F4_1 + " * " + Math.Pow(b, (double)F4_2) + ") - (" + F1_1 + " * " + Math.Pow(a, (double)F1_2) + F2_1 + " * " + Math.Pow(a, (double)F2_2) + F3_1 + " * " + Math.Pow(a, (double)F3_2) + F4_1 + " * " + Math.Pow(a, (double)F4_2) + ")";
+                }
+                else if (kousuu == 5)
+                {
+                    answer = "(" + F1_1 + " * " + Math.Pow(b, (double)F1_2) + F2_1 + " * " + Math.Pow(b, (double)F2_2) + F3_1 + " * " + Math.Pow(b, (double)F3_2) + F4_1 + " * " + Math.Pow(b, (double)F4_2) + F5_1 + " * " + Math.Pow(b, (double)F5_2) + ") - (" + F1_1 + " * " + Math.Pow(a, (double)F1_2) + F2_1 + " * " + Math.Pow(a, (double)F2_2) + F3_1 + " * " + Math.Pow(a, (double)F3_2) + F4_1 + " * " + Math.Pow(a, (double)F4_2) + F5_1 + " * " + Math.Pow(a, (double)F5_2) + ")";
+                }
+                else
+                {
+                    answer = "";
+                }
 
-            Console.WriteLine("操作を選択");
-            Console.WriteLine("------------------------------");
-            Console.WriteLine("0 : 式で出力");
-            Console.WriteLine("1 : 計算して出力(分数処理不可)");
-            Console.WriteLine();
-            Console.Write("Input:");
-            int keisan = int.Parse(Console.ReadLine());
+                Console.WriteLine("操作を選択");
+                Console.WriteLine("------------------------------");
+                Console.WriteLine("0 : 式で出力");
+                Console.WriteLine("1 : 計算して出力(分数処理不可)");
+                Console.WriteLine();
+                Console.Write("Input:");
+                int keisan = int.Parse(Console.ReadLine());
 
-            if (keisan == 0)
-            {
-                Program.ModeSelect(answer);
+                if (keisan == 0)
+                {
+                    Program.ModeSelect(answer);
+                }
+                else if (keisan == 1)
+                {
+                    DataTable dataTable = new DataTable();
+                    var Result = dataTable.Compute(answer, "");
+                    Program.ModeSelect(Convert.ToString(Result));
+                }
             }
-            else if(keisan == 1)
+            catch (Exception e)
             {
-                DataTable dataTable = new DataTable();
-                var Result = dataTable.Compute(answer, "");
-                Program.ModeSelect(Convert.ToString(Result));
+                Program.ExceptionHandler(e.ToString(), e);
             }
         }
 
@@ -1176,15 +1187,15 @@ namespace math
                 }
 
             } 
-            catch (OverflowException)
+            catch (OverflowException e)
             {
-                Exception e = new OverflowException();
-                Program.ExceptionHandler("System.OverflowException", e);
+                //Exception e = new OverflowException();
+                Program.ExceptionHandler(e.ToString(), e);
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
-                Exception e = new FormatException();
-                Program.ExceptionHandler("System.FormatException", e);
+                //Exception e = new FormatException();
+                Program.ExceptionHandler(e.ToString(), e);
                 
                 
             }
@@ -1192,411 +1203,446 @@ namespace math
 
         public static void Mode7()
         {
-            Console.WriteLine("計算トレーニングモード");
-            Console.WriteLine("含む計算を選択");
-            Console.WriteLine("1 : +");
-            Console.WriteLine("2 : -");
-            Console.WriteLine("3 : *");
-            //Console.WriteLine("4 : /");
-
-            Console.Write("Input:");
-            int mode = int.Parse(Console.ReadLine());
-
-            Console.WriteLine();
-            Console.WriteLine("レベル選択");
-            Console.WriteLine("1 : 4桁まで,-符号なし");
-            Console.WriteLine("2 : +-4桁");
-            Console.Write("Input:");
-            int level = int.Parse(Console.ReadLine());
-            
-
-            if (level == 1)
+            try
             {
-                Random random = new Random();
-                int[] number = { 106, 112, 115, 122, 130, 214, 215, 217, 222, 228, 229, 302, 305, 307, 312, 314, 315, 321, 322, 402, 404, 422, 507, 515, 518, 520, 523, 525, 606, 610, 611, 617, 618, 620, 701, 702, 706, 715, 722, 730, 804, 808, 810, 820, 830, 908, 909, 1001, 1005, 1010, 1013, 1028, 1031, 1107, 1115, 1124, 1201, 1208, 1210, 1212, 1213 };
-                Stopwatch stopwatch = new Stopwatch();
-                bool[] result = new bool[10];
-                stopwatch.Start();
-                result[0] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[1] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[2] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[3] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[4] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[5] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[6] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[7] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[8] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                result[9] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
-                stopwatch.Stop();
-                Console.Clear();
-                Console.WriteLine("結果");
-                int count = result.Count(x => x == true);
-                TimeSpan timeSpan = stopwatch.Elapsed;
-                int score = (int)((count * 100) - Math.Round(timeSpan.TotalSeconds,MidpointRounding.AwayFromZero));
-                Console.WriteLine("正解数: " + count + "/10");
-                Console.WriteLine("タイム: " + timeSpan.TotalSeconds + " 秒");
-                Console.WriteLine("スコア: " + score);
-                Console.WriteLine();
-                Console.Write("Enterで終了");
-                Console.ReadLine();
-                Console.Clear();
-                Program.ModeSelect("");
-            }
-            else
-            {
-                Random random = new Random();
-                Stopwatch stopwatch = new Stopwatch();
-                bool[] result = new bool[10];
-                stopwatch.Start();
-                result[0] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[1] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[2] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[3] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[4] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[5] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[6] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[7] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[8] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                result[9] = Q(random.Next(-9999,9999), random.Next(-9999,9999), mode);
-                stopwatch.Stop();
-                Console.Clear();
-                Console.WriteLine("結果");
-                int count = result.Count(x => x == true);
-                TimeSpan timeSpan = stopwatch.Elapsed;
-                int score = (int)((count * 100) - Math.Round(timeSpan.TotalSeconds, MidpointRounding.AwayFromZero));
-                Console.WriteLine("正解数: " + count + "/10");
-                Console.WriteLine("タイム: " + timeSpan.TotalSeconds + " 秒");
-                Console.WriteLine("スコア: " + score);
-                Console.WriteLine();
-                Console.Write("Enterで終了");
-                Console.ReadLine();
-                Console.Clear();
-                Program.ModeSelect("");
-            }
+                Console.WriteLine("計算トレーニングモード");
+                Console.WriteLine("含む計算を選択");
+                Console.WriteLine("1 : +");
+                Console.WriteLine("2 : -");
+                Console.WriteLine("3 : *");
+                //Console.WriteLine("4 : /");
 
-           static bool Q(int a,int b,int mode)
-            {
+                Console.Write("Input:");
+                int mode = int.Parse(Console.ReadLine());
+
                 Console.WriteLine();
-                int answer;
-                if (mode == 1)
+                Console.WriteLine("レベル選択");
+                Console.WriteLine("1 : 4桁まで,-符号なし");
+                Console.WriteLine("2 : +-4桁");
+                Console.Write("Input:");
+                int level = int.Parse(Console.ReadLine());
+
+
+                if (level == 1)
                 {
-                    answer = a + b;
-                    Console.Write(a + " + " + b + " = ");
-                    int input = int.Parse(Console.ReadLine());
-                    if (answer == input)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else if (mode == 2)
-                {
-                    answer = a - b;
-                    Console.Write(a + " - " + b + " = ");
-                    int input = int.Parse(Console.ReadLine());
-                    if (answer == input)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else if (mode == 3)
-                {
-                    answer = a * b;
-                    Console.Write(a + " * " + b + " = ");
-                    int input = int.Parse(Console.ReadLine());
-                    if (answer == input)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    Random random = new Random();
+                    int[] number = { 106, 112, 115, 122, 130, 214, 215, 217, 222, 228, 229, 302, 305, 307, 312, 314, 315, 321, 322, 402, 404, 422, 507, 515, 518, 520, 523, 525, 606, 610, 611, 617, 618, 620, 701, 702, 706, 715, 722, 730, 804, 808, 810, 820, 830, 908, 909, 1001, 1005, 1010, 1013, 1028, 1031, 1107, 1115, 1124, 1201, 1208, 1210, 1212, 1213 };
+                    Stopwatch stopwatch = new Stopwatch();
+                    bool[] result = new bool[10];
+                    stopwatch.Start();
+                    result[0] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[1] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[2] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[3] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[4] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[5] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[6] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[7] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[8] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    result[9] = Q(number[random.Next(0, number.Length)], number[random.Next(0, number.Length)], mode);
+                    stopwatch.Stop();
+                    Console.Clear();
+                    Console.WriteLine("結果");
+                    int count = result.Count(x => x == true);
+                    TimeSpan timeSpan = stopwatch.Elapsed;
+                    int score = (int)((count * 100) - Math.Round(timeSpan.TotalSeconds, MidpointRounding.AwayFromZero));
+                    Console.WriteLine("正解数: " + count + "/10");
+                    Console.WriteLine("タイム: " + timeSpan.TotalSeconds + " 秒");
+                    Console.WriteLine("スコア: " + score);
+                    Console.WriteLine();
+                    Console.Write("Enterで終了");
+                    Console.ReadLine();
+                    Console.Clear();
+                    Program.ModeSelect("");
                 }
                 else
                 {
-                    return false; //エラー回避用
+                    Random random = new Random();
+                    Stopwatch stopwatch = new Stopwatch();
+                    bool[] result = new bool[10];
+                    stopwatch.Start();
+                    result[0] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[1] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[2] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[3] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[4] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[5] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[6] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[7] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[8] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    result[9] = Q(random.Next(-9999, 9999), random.Next(-9999, 9999), mode);
+                    stopwatch.Stop();
+                    Console.Clear();
+                    Console.WriteLine("結果");
+                    int count = result.Count(x => x == true);
+                    TimeSpan timeSpan = stopwatch.Elapsed;
+                    int score = (int)((count * 100) - Math.Round(timeSpan.TotalSeconds, MidpointRounding.AwayFromZero));
+                    Console.WriteLine("正解数: " + count + "/10");
+                    Console.WriteLine("タイム: " + timeSpan.TotalSeconds + " 秒");
+                    Console.WriteLine("スコア: " + score);
+                    Console.WriteLine();
+                    Console.Write("Enterで終了");
+                    Console.ReadLine();
+                    Console.Clear();
+                    Program.ModeSelect("");
+                }
+            }
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
+
+            static bool Q(int a,int b,int mode)
+            {
+                try
+                {
+                    Console.WriteLine();
+                    int answer;
+                    if (mode == 1)
+                    {
+                        answer = a + b;
+                        Console.Write(a + " + " + b + " = ");
+                        int input = int.Parse(Console.ReadLine());
+                        if (answer == input)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else if (mode == 2)
+                    {
+                        answer = a - b;
+                        Console.Write(a + " - " + b + " = ");
+                        int input = int.Parse(Console.ReadLine());
+                        if (answer == input)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else if (mode == 3)
+                    {
+                        answer = a * b;
+                        Console.Write(a + " * " + b + " = ");
+                        int input = int.Parse(Console.ReadLine());
+                        if (answer == input)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false; //エラー回避用
+                    }
+                }
+                catch (Exception e)
+                {
+                    Program.ExceptionHandler(e.ToString(), e);
+                    return false;
                 }
             } 
         }
 
         public static void Mode9() 
         {
-
-            Console.WriteLine("Mode9");
-            //int u = 1;
-            //int y = 3;
-            //double result = Integrate.GaussKronrod(x => Math.Pow(x,2) + 2 * x + 1, u, y);
-            //Program.ModeSelect(Convert.ToString(result));
-
-            Console.Write("項数を入力:");
-            int kousuu = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            if (kousuu == 1)
+            try
             {
-                Console.WriteLine("ax^p");
-                Console.Write("a:");
-                double a = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                double p = double.Parse(Console.ReadLine());
-                Console.WriteLine();
+                Console.WriteLine("Mode9");
+                //int u = 1;
+                //int y = 3;
+                //double result = Integrate.GaussKronrod(x => Math.Pow(x,2) + 2 * x + 1, u, y);
+                //Program.ModeSelect(Convert.ToString(result));
 
-                //積分区間入力
-                Console.WriteLine("積分区間入力");
-                Console.WriteLine("b ");
-                Console.WriteLine("∫f(x) dx");
-                Console.WriteLine("a ");
+                Console.Write("項数を入力:");
+                int kousuu = int.Parse(Console.ReadLine());
                 Console.WriteLine();
-                Console.Write("b:");
-                double kukanb = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("a:");
-                double kukana = double.Parse(Console.ReadLine());
-                Console.WriteLine();
+                if (kousuu == 1)
+                {
+                    Console.WriteLine("ax^p");
+                    Console.Write("a:");
+                    double a = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    double p = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
 
-                //計算
-                double result = Integrate.GaussKronrod(x => a * Math.Pow(x,p), kukana, kukanb);
-                Program.ModeSelect(Convert.ToString(result));
+                    //積分区間入力
+                    Console.WriteLine("積分区間入力");
+                    Console.WriteLine("b ");
+                    Console.WriteLine("∫f(x) dx");
+                    Console.WriteLine("a ");
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double kukanb = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("a:");
+                    double kukana = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //計算
+                    double result = Integrate.GaussKronrod(x => a * Math.Pow(x, p), kukana, kukanb);
+                    Program.ModeSelect(Convert.ToString(result));
 
 
+                }
+                else if (kousuu == 2)
+                {
+                    Console.WriteLine("ax^p + bx^q");
+                    Console.Write("a:");
+                    double a = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    double p = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double b = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    double q = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //積分区間入力
+                    Console.WriteLine("積分区間入力");
+                    Console.WriteLine("b ");
+                    Console.WriteLine("∫f(x) dx");
+                    Console.WriteLine("a ");
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double kukanb = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("a:");
+                    double kukana = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //計算
+                    double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)), kukana, kukanb);
+                    Program.ModeSelect(Convert.ToString(result));
+
+
+
+                }
+                else if (kousuu == 3)
+                {
+                    Console.WriteLine("ax^p + bx^q + cx^r");
+                    Console.Write("a:");
+                    double a = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    double p = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double b = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    double q = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    double c = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    double r = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //積分区間入力
+                    Console.WriteLine("積分区間入力");
+                    Console.WriteLine("b ");
+                    Console.WriteLine("∫f(x) dx");
+                    Console.WriteLine("a ");
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double kukanb = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("a:");
+                    double kukana = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //計算
+                    double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)), kukana, kukanb);
+                    Program.ModeSelect(Convert.ToString(result));
+
+
+
+                }
+                else if (kousuu == 4)
+                {
+                    Console.WriteLine("ax^p + bx^q + cx^r + dx^s");
+                    Console.Write("a:");
+                    double a = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    double p = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double b = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    double q = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    double c = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    double r = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("d:");
+                    double d = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("s:");
+                    double s = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //積分区間入力
+                    Console.WriteLine("積分区間入力");
+                    Console.WriteLine("b ");
+                    Console.WriteLine("∫f(x) dx");
+                    Console.WriteLine("a ");
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double kukanb = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("a:");
+                    double kukana = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //計算
+                    double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)) + (d * Math.Pow(x, s)), kukana, kukanb);
+                    Program.ModeSelect(Convert.ToString(result));
+
+
+
+                }
+                else if (kousuu == 5)
+                {
+                    Console.WriteLine("ax^p + bx^q + cx^r + dx^s + ex^t");
+                    Console.Write("a:");
+                    double a = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    double p = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double b = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    double q = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    double c = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    double r = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("d:");
+                    double d = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("s:");
+                    double s = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("e:");
+                    double e = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("t:");
+                    double t = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //積分区間入力
+                    Console.WriteLine("積分区間入力");
+                    Console.WriteLine("b ");
+                    Console.WriteLine("∫f(x) dx");
+                    Console.WriteLine("a ");
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    double kukanb = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("a:");
+                    double kukana = double.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    //計算
+                    double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)) + (d * Math.Pow(x, s)) + (e * Math.Pow(x, t)), kukana, kukanb);
+                    Program.ModeSelect(Convert.ToString(result));
+
+
+
+                }
             }
-            else if (kousuu == 2)
+            catch (Exception e)
             {
-                Console.WriteLine("ax^p + bx^q");
-                Console.Write("a:");
-                double a = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                double p = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                double b = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                double q = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                //積分区間入力
-                Console.WriteLine("積分区間入力");
-                Console.WriteLine("b ");
-                Console.WriteLine("∫f(x) dx");
-                Console.WriteLine("a ");
-                Console.WriteLine();
-                Console.Write("b:");
-                double kukanb = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("a:");
-                double kukana = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                //計算
-                double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)), kukana, kukanb);
-                Program.ModeSelect(Convert.ToString(result));
-
-
-
-            }
-            else if (kousuu == 3)
-            {
-                Console.WriteLine("ax^p + bx^q + cx^r");
-                Console.Write("a:");
-                double a = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                double p = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                double b = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                double q = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                double c = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                double r = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                //積分区間入力
-                Console.WriteLine("積分区間入力");
-                Console.WriteLine("b ");
-                Console.WriteLine("∫f(x) dx");
-                Console.WriteLine("a ");
-                Console.WriteLine();
-                Console.Write("b:");
-                double kukanb = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("a:");
-                double kukana = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                //計算
-                double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)), kukana, kukanb);
-                Program.ModeSelect(Convert.ToString(result));
-
-
-
-            }
-            else if (kousuu == 4)
-            {
-                Console.WriteLine("ax^p + bx^q + cx^r + dx^s");
-                Console.Write("a:");
-                double a = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                double p = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                double b = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                double q = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                double c = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                double r = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("d:");
-                double d = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("s:");
-                double s = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                //積分区間入力
-                Console.WriteLine("積分区間入力");
-                Console.WriteLine("b ");
-                Console.WriteLine("∫f(x) dx");
-                Console.WriteLine("a ");
-                Console.WriteLine();
-                Console.Write("b:");
-                double kukanb = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("a:");
-                double kukana = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                //計算
-                double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)) + (d * Math.Pow(x, s)), kukana, kukanb);
-                Program.ModeSelect(Convert.ToString(result));
-
-
-
-            }
-            else if (kousuu == 5)
-            {
-                Console.WriteLine("ax^p + bx^q + cx^r + dx^s + ex^t");
-                Console.Write("a:");
-                double a = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                double p = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                double b = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                double q = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                double c = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                double r = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("d:");
-                double d = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("s:");
-                double s = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("e:");
-                double e = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("t:");
-                double t = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                //積分区間入力
-                Console.WriteLine("積分区間入力");
-                Console.WriteLine("b ");
-                Console.WriteLine("∫f(x) dx");
-                Console.WriteLine("a ");
-                Console.WriteLine();
-                Console.Write("b:");
-                double kukanb = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("a:");
-                double kukana = double.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                //計算
-                double result = Integrate.GaussKronrod(x => (a * Math.Pow(x, p)) + (b * Math.Pow(x, q)) + (c * Math.Pow(x, r)) + (d * Math.Pow(x, s)) + (e * Math.Pow(x, t)), kukana, kukanb);
-                Program.ModeSelect(Convert.ToString(result));
-
-
-
+                Program.ExceptionHandler(e.ToString(), e);
             }
         }
 
         public static void Mode10()
         {
-            Console.WriteLine("Mode10");
-            Console.WriteLine("操作を選択");
-            Console.WriteLine("s : Sin");
-            Console.WriteLine("c : Cos");
-            Console.WriteLine("t : Tan");
-            Console.WriteLine();
-            Console.Write("Input:");
-            string mode = Console.ReadLine();
-            Console.WriteLine();
-            Console.Write("角度を入力:");
-            int kaku = int.Parse(Console.ReadLine());
+            try
+            {
+                Console.WriteLine("Mode10");
+                Console.WriteLine("操作を選択");
+                Console.WriteLine("s : Sin");
+                Console.WriteLine("c : Cos");
+                Console.WriteLine("t : Tan");
+                Console.WriteLine();
+                Console.Write("Input:");
+                string mode = Console.ReadLine();
+                Console.WriteLine();
+                Console.Write("角度を入力:");
+                int kaku = int.Parse(Console.ReadLine());
 
-            double ans;
+                double ans;
 
-            if (mode == "s")
-            {
-                double rad = (kaku / 180) * Math.PI;
-                ans = Math.Sin(rad);
-            }
-            else if (mode == "c")
-            {
-                double rad = (kaku / 180) * Math.PI;
-                ans = Math.Cos(rad);
-            }
-            else if (mode == "t")
-            {
-                double rad = (kaku / 180) * Math.PI;
-                ans = Math.Tan(rad);
-            }
-            else
-            {
-                ans = 0; //エラー回避
-            }
-            
+                if (mode == "s")
+                {
+                    double rad = (kaku / 180) * Math.PI;
+                    ans = Math.Sin(rad);
+                }
+                else if (mode == "c")
+                {
+                    double rad = (kaku / 180) * Math.PI;
+                    ans = Math.Cos(rad);
+                }
+                else if (mode == "t")
+                {
+                    double rad = (kaku / 180) * Math.PI;
+                    ans = Math.Tan(rad);
+                }
+                else
+                {
+                    ans = 0; //エラー回避
+                }
 
-            Program.ModeSelect(Convert.ToString(ans));
+
+                Program.ModeSelect(Convert.ToString(ans));
+            }
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
         }
 
         public static void Mode11()
         {
-            Console.WriteLine("Mode11");
-            Console.Write("ルートの中の値:");
-            int val = int.Parse(Console.ReadLine());
-            double ans = Math.Sqrt(val);
-            Program.ModeSelect(Convert.ToString(ans));
+            try
+            {
+                Console.WriteLine("Mode11");
+                Console.Write("ルートの中の値:");
+                int val = int.Parse(Console.ReadLine());
+                double ans = Math.Sqrt(val);
+                Program.ModeSelect(Convert.ToString(ans));
+            }
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
         }
 
         public class Flaction
@@ -1641,95 +1687,193 @@ namespace math
 
         public static void Mode12_1()
         {
-            using (StreamReader reader = new StreamReader("data\\convrule.txt"))
+            using (StreamReader reader = new StreamReader("data\\convrule.txt", Encoding.UTF8))
             {
+                Console.Write("Input(小数点以下6桁):");
+                string inp = Console.ReadLine();
+                string[] input = inp.Split(".");
 
+                string t = reader.ReadToEnd();
+                string[] table = t.Split("-");
+                
+                string bun = "";
+
+                for (int i = 0; i < table.Length / 2; i++)
+                {
+                    //Console.WriteLine(table[i]);
+                    if (table[i] == input[1])
+                    {
+                        bun = table[i + 1];
+                        break;
+                    }
+                    else
+                    {
+                        i += 1;
+                    }
+                }
+
+                //Console.ReadLine();
+
+                if (bun != "")
+                {
+                    string ans = FractionLib.Fraction.Add(input[0] + "/1", bun);
+                    Program.ModeSelect(ans);
+                }
+                else
+                {
+                    Exception e = new Exception("リストに値が含まれていません");
+                    Program.ExceptionHandler(e.ToString(), e);
+                }
             }
+            
         }
         
         public static void Mode12_2()
         {
-            
+            try
+            {
+                Console.Write("小数:");
+                string inp = Console.ReadLine();
+                string[] input = inp.Split(".");
+
+                double sii = double.Parse(inp) * Math.Pow(10, input[1].Length);
+                int bo = 1 * (int)Math.Pow(10, input[1].Length);
+                int si = (int)sii;
+
+                while (1 == 1)
+                {
+                    if (Euclid.GreatestCommonDivisor(si, bo) != 1)
+                    {
+                        si /= (int)Euclid.GreatestCommonDivisor(si, bo);
+                        bo /= (int)Euclid.GreatestCommonDivisor(si, bo);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                Program.ModeSelect(si + "/" + bo);
+            }
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
         }
 
         public static void Mode13()
         {
-            Console.WriteLine("Mode13");
-            Console.WriteLine("a^n");
-            Console.Write("a:");
-            int a = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            Console.Write("n:");
-            int n = int.Parse(Console.ReadLine());
-            string ans = Convert.ToString(Math.Pow(a,n));
-            Program.ModeSelect(ans);
+            try
+            {
+                Console.WriteLine("Mode13");
+                Console.WriteLine("a^n");
+                Console.Write("a:");
+                int a = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                Console.Write("n:");
+                int n = int.Parse(Console.ReadLine());
+                string ans = Convert.ToString(Math.Pow(a, n));
+                Program.ModeSelect(ans);
+            }
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
         }
 
         public static void Mode14()
         {
-            Console.WriteLine("Mode14");
-            Console.Write("値の数:");
-            int num = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            long[] value = new long[num];
-            for (int i = 0; i <= num - 1; i++)
+            try
             {
-                Console.Write(i + "番目:");
-                value[i] = int.Parse(Console.ReadLine());
+                Console.WriteLine("Mode14");
+                Console.Write("値の数:");
+                int num = int.Parse(Console.ReadLine());
                 Console.WriteLine();
-            }
+                long[] value = new long[num];
+                for (int i = 0; i <= num - 1; i++)
+                {
+                    Console.Write(i + "番目:");
+                    value[i] = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                }
 
-            long ans = Euclid.GreatestCommonDivisor(value);
-            Program.ModeSelect(Convert.ToString(ans));
+                long ans = Euclid.GreatestCommonDivisor(value);
+                Program.ModeSelect(Convert.ToString(ans));
+            }
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
         }
 
         public static void Mode15()
         {
-            Console.WriteLine("Mode15");
-            Console.Write("値の数:");
-            int num = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            long[] value = new long[num];
-            for (int i = 0; i <= num - 1; i++)
+            try
             {
-                Console.Write(i + "番目:");
-                value[i] = int.Parse(Console.ReadLine());
+                Console.WriteLine("Mode15");
+                Console.Write("値の数:");
+                int num = int.Parse(Console.ReadLine());
                 Console.WriteLine();
-            }
+                long[] value = new long[num];
+                for (int i = 0; i <= num - 1; i++)
+                {
+                    Console.Write(i + "番目:");
+                    value[i] = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                }
 
-            long ans = Euclid.LeastCommonMultiple(value);
-            Program.ModeSelect(Convert.ToString(ans));
+                long ans = Euclid.LeastCommonMultiple(value);
+                Program.ModeSelect(Convert.ToString(ans));
+            }
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
         }
 
         public static void Mode16()
         {
-            Console.WriteLine("Mode16");
-            Console.Write("値の数:");
-            int num = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            double[] value = new double[num];
-            for (int i = 0; i <= num - 1; i++)
+            try
             {
-                Console.Write(i + "番目:");
-                value[i] = int.Parse(Console.ReadLine());
+                Console.WriteLine("Mode16");
+                Console.Write("値の数:");
+                int num = int.Parse(Console.ReadLine());
                 Console.WriteLine();
+                double[] value = new double[num];
+                for (int i = 0; i <= num - 1; i++)
+                {
+                    Console.Write(i + "番目:");
+                    value[i] = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine("平均値  : " + value.Average());
+                Console.WriteLine("第1四分位数 : " + value.Percentile(25));
+                Console.WriteLine("中央値 : " + value.Median());
+                Console.WriteLine("第3四分位数 : " + value.Percentile(75));
+                Console.WriteLine("分散 : " + value.PopulationVariance());
+                Console.WriteLine("標準偏差 : " + value.PopulationStandardDeviation());
+                Program.ModeSelect("");
+                //Program.ModeSelect(Convert.ToString(avg));
             }
-            
-            Console.WriteLine("平均値  : " + value.Average());
-            Console.WriteLine("第1四分位数 : " + value.Percentile(25));
-            Console.WriteLine("中央値 : " + value.Median());
-            Console.WriteLine("第3四分位数 : " + value.Percentile(75));
-            Console.WriteLine("分散 : " + value.PopulationVariance());
-            Console.WriteLine("標準偏差 : " + value.PopulationStandardDeviation());
-            Program.ModeSelect("");
-            //Program.ModeSelect(Convert.ToString(avg));
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
         }
 
         public static void Mode17()
         {
-            Console.WriteLine("Mode17");
-            Process.Start("./graphwriter.exe").WaitForExit();
-            Program.ModeSelect("");
+            try
+            {
+                Console.WriteLine("Mode17");
+                Process.Start("./graphwriter.exe").WaitForExit();
+                Program.ModeSelect("");
+            }
+            catch (Exception e)
+            {
+                Program.ExceptionHandler(e.ToString(), e);
+            }
         }
     }
 }

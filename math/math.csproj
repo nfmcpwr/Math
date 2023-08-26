@@ -6,12 +6,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>nfmcpwr</Authors>
     <Company />
-    <Version>3.1.05</Version>
+    <Version>3.4.16</Version>
     <ApplicationIcon>math.ico</ApplicationIcon>
     <Title>Math</Title>
     <PackageProjectUrl>https://github.com/nfmcpwr/Math</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nfmcpwr/Math</RepositoryUrl>
     <NeutralLanguage>ja</NeutralLanguage>
+    <AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile>C:\test\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,17 +25,14 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
 
+	<!--<PropertyGroup>
+		<OutputPath>
+			$(Configuration)\
+		</OutputPath>
+	</PropertyGroup>-->
+	
   <ItemGroup>
     <Content Include="math.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="DataManager">
-      <HintPath>lib\DataManager.dll</HintPath>
-    </Reference>
-    <Reference Include="FractionLib">
-      <HintPath>lib\FractionLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +41,41 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <Reference Include="DataManager">
+      <HintPath>lib\DataManager.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FractionLib">
+      <HintPath>lib\FractionLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>lib\MathNet.Numerics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="data\convrule.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="data\dic\newdicdata.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="data\dic\test">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="lib\**\*.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+	  <!--None Update="lib\FractionLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="lib\MathNet.Numerics.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	-->
   </ItemGroup>
 
 </Project>
