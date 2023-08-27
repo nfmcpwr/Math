@@ -20,7 +20,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "3.4.16";
+        public static string version = "3.4.18";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -175,8 +175,8 @@ namespace math
                 Console.WriteLine("1 : old(非推奨)");
                 Console.WriteLine("2 : table");
                 Console.WriteLine("3 : new");
-                Console.Write(":");
-                string m = Console.ReadLine();
+                Console.Write(":3");
+                string m = "3"; //Console.ReadLine();
                 if (m == "1")
                 {
                     Console.Write("値:");
@@ -1740,12 +1740,15 @@ namespace math
                 int bo = 1 * (int)Math.Pow(10, input[1].Length);
                 int si = (int)sii;
 
+                int gcd = 1;
+
                 while (1 == 1)
                 {
                     if (Euclid.GreatestCommonDivisor(si, bo) != 1)
                     {
-                        si /= (int)Euclid.GreatestCommonDivisor(si, bo);
-                        bo /= (int)Euclid.GreatestCommonDivisor(si, bo);
+                        gcd = (int)Euclid.GreatestCommonDivisor(si, bo);
+                        si /= gcd;
+                        bo /= gcd;
                     }
                     else
                     {
