@@ -32,6 +32,7 @@ namespace math
         public static void ModeSelect(string Answer)
         {
             //Console.WriteLine();
+            Console.Clear();
 
             if (Answer != "")
             {
@@ -47,6 +48,7 @@ namespace math
             }
 
             Console.WriteLine("操作を選択");
+            Console.WriteLine();
             Console.WriteLine("1 : 文字を含まない計算");
             Console.WriteLine("2 : 微分");
             Console.WriteLine("3 : 1次式の解");
