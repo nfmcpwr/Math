@@ -31,13 +31,13 @@ namespace math
     {
         public static void ModeSelect(string Answer)
         {
-            Console.WriteLine();
+            //Console.WriteLine();
 
             if (Answer != "")
             {
                 Console.WriteLine("前回の計算の答えは " + Answer);
                 Console.WriteLine();
-                Console.WriteLine();
+                //Console.WriteLine();
             }
 
             if (Global.devmode == true)
@@ -171,11 +171,11 @@ namespace math
             {
                 //小数 -> 分数
                 Console.WriteLine("Mode12");
-                Console.WriteLine("モード選択");
+                /*Console.WriteLine("モード選択");
                 Console.WriteLine("1 : old(非推奨)");
                 Console.WriteLine("2 : table");
                 Console.WriteLine("3 : new");
-                Console.Write(":3");
+                Console.Write(":3");*/
                 string m = "3"; //Console.ReadLine();
                 if (m == "1")
                 {
@@ -375,7 +375,7 @@ namespace math
                 if (version != "v" + Global.version)
                 {
                     Console.WriteLine();
-                    Console.WriteLine("アップデートが利用可能:" + version);
+                    Console.WriteLine("アップデート利用可能:" + version);
                     Console.WriteLine();
                     Global.update = true;
                 }
@@ -444,7 +444,7 @@ namespace math
                 Exit();
             }
 
-            Console.WriteLine("Math v" + Global.version);
+            //Console.WriteLine("Math v" + Global.version);
             if (0 < args.Length && args[0] == "BFC73BBA0F6D4883A3EDC5B905455ED1")
             {
                 Global.devmode = true;
