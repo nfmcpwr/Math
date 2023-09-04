@@ -1,18 +1,25 @@
 ﻿using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.Xml;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using MathNet.Numerics;
 using MathNet.Numerics.Statistics;
+using Newtonsoft.Json;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 //using System.Drawing;
 //using System.Windows.Forms;
 
@@ -57,7 +64,7 @@ namespace math
             Console.WriteLine("6 : 定積分");
             Console.WriteLine("7 : 計算練習");
             Console.WriteLine("8 : 辞書モード");
-            Console.WriteLine("9 : 定積分(MathNet.Numerics.Integrate.GaussKronrod使用)");
+            Console.WriteLine("9 : 定積分(MathNet使用)");
             Console.WriteLine("10 : 三角比の値");
             Console.WriteLine("11 : 平方根の値");
             Console.WriteLine("12 : 小数 -> 分数変換");
@@ -66,6 +73,7 @@ namespace math
             Console.WriteLine("15 : 最小公倍数");
             Console.WriteLine("16 : データ");
             Console.WriteLine("17 : 関数グラフ");
+            Console.WriteLine("18 : 翻訳");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
@@ -223,6 +231,10 @@ namespace math
             {
                 //グラフ
                 Calc.Mode17();
+            }
+            else if (Mode == 18)
+            {
+                Translation.TMode();
             }
 
             
@@ -464,6 +476,130 @@ namespace math
                 ModeSelect("");
             }*/
             //ModeSelect("");
+        }
+    }
+
+    public class Translation
+    {
+        class InternalValue
+        {
+            public static readonly string key = "fbc1dec7-4ed1-2f26-00b9-3b5102ba9a94";
+            //JKiHPcVUxmnyNTSWZozjfeYlrAXasFEOvQuBbICw
+        }
+
+        public static void TMode()
+        {
+            Console.WriteLine("翻訳");
+            Console.WriteLine("1 : en -> ja");
+            Console.WriteLine("2 : ja -> en");
+            
+            Console.WriteLine("0 : 終了");
+            Console.WriteLine("-----------------------------------");
+            string i = Console.ReadLine();
+            
+            if (i == "1")
+            {
+                Request("EN", "JA");
+            }
+            else if (i == "2")
+            {
+                Request("JA", "EN");
+            }
+            else
+            {
+                Program.ModeSelect("");
+            }
+        }
+
+        static void Request(string source, string target)
+        {
+            string src;
+            string tgt;
+
+            if (source == "EN")
+            {
+                src = "eng_Latn";
+            }
+            else if (source == "JA")
+            {
+                src = "jpn_Jpan";
+            }
+            else
+            {
+                throw new Exception();
+            }
+            
+            if(target == "EN")
+            {
+                tgt = "eng_Latn";
+            }
+            else if (target == "JA")
+            {
+                tgt = "jpn_Jpan";
+            }
+            else
+            {
+                throw new Exception();
+            }
+
+            
+            Console.Write("Text:");
+            string txt = Console.ReadLine();
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", " ");
+            client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Math", Global.version));
+
+            HttpRequestMessage req = new HttpRequestMessage();
+            req.RequestUri = new Uri("https://api.nlpcloud.io/v1/nllb-200-3-3b/translation");
+            req.Method = HttpMethod.Post;
+            req.Content = new StringContent(Input(src, tgt, txt), Encoding.UTF8, "application/json");
+
+            Task task = Translate(client, req);
+            task.Wait();
+
+            //Console.ReadLine();
+        }
+
+        static string Input(string source, string target, string text)
+        {
+            Body reqbody = new Body();
+            reqbody.source = source;
+            reqbody.target = target;
+            reqbody.text = text;
+
+            string json = JsonConvert.SerializeObject(reqbody);
+            return json;
+        }
+
+
+        static async Task Translate(HttpClient c, HttpRequestMessage r)
+        {
+            HttpResponseMessage response = await c.SendAsync(r);
+            if (response.IsSuccessStatusCode != true)
+            {
+                Console.WriteLine(response.StatusCode);
+                Console.WriteLine(response.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                string j = await response.Content.ReadAsStringAsync();
+                Translatedtext ttext = JsonConvert.DeserializeObject<Translatedtext>(j);
+                Console.WriteLine(j);
+                Console.WriteLine(ttext.translation_text);
+            }
+        }
+
+        public class Body
+        {
+            public string text { get; set; }
+            public string source { get; set; }
+            public string target { get; set; }
+        }
+
+        public class Translatedtext
+        {
+            public string translation_text { get; set; }
         }
     }
 
@@ -1637,7 +1773,7 @@ namespace math
             {
                 Console.WriteLine("Mode11");
                 Console.Write("ルートの中の値:");
-                int val = int.Parse(Console.ReadLine());
+                double val = double.Parse(Console.ReadLine());
                 double ans = Math.Sqrt(val);
                 Program.ModeSelect(Convert.ToString(ans));
             }
