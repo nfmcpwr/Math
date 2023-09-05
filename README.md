@@ -32,6 +32,8 @@ https://dotnet.microsoft.com/en-us/download/dotnet/3.1
 ## Credits
  - Math.NET Numerics
 https://github.com/mathnet/mathnet-numerics
+ - JSON.NET
+https://github.com/JamesNK/Newtonsoft.Json
 
 ## License
 ![MIT LICENSE](/LICENSE)
