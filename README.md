@@ -5,7 +5,7 @@
 
 数学計算機/Math Solver
 
-# 機能/Feature
+## 機能/Feature
     ![Feature List](docs/features.md)
     
 ## .NET Core 3.1 Runtime必須
