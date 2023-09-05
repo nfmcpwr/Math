@@ -34,4 +34,4 @@ https://dotnet.microsoft.com/en-us/download/dotnet/3.1
 https://github.com/mathnet/mathnet-numerics
 
 ## License
-![LICENSE](/LICENSE)
+![MIT LICENSE](/LICENSE)
