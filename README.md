@@ -1,26 +1,12 @@
 # Math
-![](https://img.shields.io/badge/-Windows-0078D6.svg?logo=windows&style=plastic&label=)
-![](https://img.shields.io/github/v/release/nfmcpwr/Math?style=plastic)
-![](https://img.shields.io/github/downloads/nfmcpwr/Math/total?color=green&style=plastic)<br>
-数学計算機
+![Windows](https://img.shields.io/badge/-Windows-0078D6.svg?logo=windows&style=plastic&label=)
+[![Latest Version](https://img.shields.io/github/v/release/nfmcpwr/Math?style=plastic)](https://github.com/nfmcpwr/Math/releases)
+![Downloads](https://img.shields.io/github/downloads/nfmcpwr/Math/total?color=green&style=plastic)<br>
 
-# 機能
-単純な計算と1次式,2次式,積分,微分が計算可能
+数学計算機/Math Solver
 
-# 使用方法
-## Mode1の場合
-各文字間にスペースを入れて入力<br>
-例:```1 + 1```
-   ```2 * 3```
-   <br>
-   <sub>実はスペース入れなくてもok</sub>
-   
-  <br>
-  <br>
-  
-  ## 全モード分数計算不可
-  あとは使えばわかる
-
-<br>
-   ## .NET Core 3.1 必須
-   https://dotnet.microsoft.com/en-us/download/dotnet/3.1
+# 機能/Feature
+    ![Feature List](docs/features.md)
+    
+## .NET Core 3.1 Runtime必須
+    https://dotnet.microsoft.com/en-us/download/dotnet/3.1
