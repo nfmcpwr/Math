@@ -28,7 +28,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "3.5.21";
+        public static string version = "3.5.22";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -489,25 +489,33 @@ namespace math
 
         public static void TMode()
         {
-            Console.WriteLine("翻訳");
-            Console.WriteLine("1 : en -> ja");
-            Console.WriteLine("2 : ja -> en");
-            
-            Console.WriteLine("0 : 終了");
-            Console.WriteLine("-----------------------------------");
-            string i = Console.ReadLine();
-            
-            if (i == "1")
+            try
             {
-                Request("EN", "JA");
+                Console.WriteLine("翻訳");
+                Console.WriteLine("1 : en -> ja");
+                Console.WriteLine("2 : ja -> en");
+
+                Console.WriteLine("0 : 終了");
+                Console.WriteLine("-----------------------------------");
+                string i = Console.ReadLine();
+
+                if (i == "1")
+                {
+                    Request("EN", "JA");
+                }
+                else if (i == "2")
+                {
+                    Request("JA", "EN");
+                }
+                else
+                {
+                    Program.ModeSelect("");
+                }
             }
-            else if (i == "2")
+            catch (Exception e)
             {
-                Request("JA", "EN");
-            }
-            else
-            {
-                Program.ModeSelect("");
+                Exception ex = new HttpRequestException(e.Message, new HttpRequestException());
+                Program.ExceptionHandler(ex.ToString(), e);
             }
         }
 
