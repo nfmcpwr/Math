@@ -6,7 +6,14 @@
 数学計算機/Math Solver
 
 ## 機能/Feature
-    ![Feature List](docs/features.md)
+![Feature List](docs/features.md)
     
-## .NET Core 3.1 Runtime必須
-    https://dotnet.microsoft.com/en-us/download/dotnet/3.1
+## .NET Core 3.1 Runtime必須/Need .NET Core 3.1 Runtime
+https://dotnet.microsoft.com/en-us/download/dotnet/3.1
+
+## Credits
+ - Math.NET Numerics
+https://github.com/mathnet/mathnet-numerics
+
+## License
+![License](/LICENSE)
