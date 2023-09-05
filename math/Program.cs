@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using MathNet.Numerics;
 using MathNet.Numerics.Statistics;
 using Newtonsoft.Json;
+using KeyControl;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 //using System.Drawing;
 //using System.Windows.Forms;
@@ -27,7 +28,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "3.4.18";
+        public static string version = "3.5.21";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static bool devmode = false;
@@ -483,8 +484,7 @@ namespace math
     {
         class InternalValue
         {
-            public static readonly string key = "fbc1dec7-4ed1-2f26-00b9-3b5102ba9a94";
-            //JKiHPcVUxmnyNTSWZozjfeYlrAXasFEOvQuBbICw
+            public static readonly string key = l.I("JKiHPcVUxmnyNTSWZozjfeYlrAXasFEOvQuBbICw");
         }
 
         public static void TMode()
@@ -547,7 +547,7 @@ namespace math
             string txt = Console.ReadLine();
 
             HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", " ");
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", InternalValue.key);
             client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Math", Global.version));
 
             HttpRequestMessage req = new HttpRequestMessage();
@@ -579,14 +579,14 @@ namespace math
             if (response.IsSuccessStatusCode != true)
             {
                 Console.WriteLine(response.StatusCode);
-                Console.WriteLine(response.Content.ReadAsStringAsync());
+                //Console.WriteLine(response.Content.ReadAsStringAsync());
             }
             else
             {
                 string j = await response.Content.ReadAsStringAsync();
                 Translatedtext ttext = JsonConvert.DeserializeObject<Translatedtext>(j);
-                Console.WriteLine(j);
-                Console.WriteLine(ttext.translation_text);
+                //Console.WriteLine(j);
+                Console.WriteLine("TranslatedText: " + ttext.translation_text);
             }
         }
 
