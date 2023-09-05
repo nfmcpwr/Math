@@ -54,7 +54,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="keycontrol">
-      <HintPath>..\..\keycontrol.dll</HintPath>
+      <HintPath>..\keycontrol.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>lib\MathNet.Numerics.dll</HintPath>

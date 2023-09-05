@@ -31,6 +31,7 @@ namespace math
         public static string version = "3.5.22";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
+        public static string utext;
         public static bool devmode = false;
         //public static int a;
     }
@@ -41,6 +42,12 @@ namespace math
         {
             //Console.WriteLine();
             Console.Clear();
+
+            if (Global.update == true)
+            {
+                Console.WriteLine(Global.utext);
+                Console.WriteLine();
+            }
 
             if (Answer != "")
             {
@@ -376,7 +383,7 @@ namespace math
         static async Task GetUpdate()
         {
             HttpClient httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("math", Global.version));
+            httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Math", Global.version));
             HttpResponseMessage httpResponse = await httpClient.GetAsync("https://api.github.com/repos/nfmcpwr/Math/releases/latest");
             if (httpResponse.IsSuccessStatusCode == true)
             {
@@ -389,10 +396,11 @@ namespace math
                 //Console.WriteLine(version);
                 if (version != "v" + Global.version)
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("アップデート利用可能:" + version);
-                    Console.WriteLine();
+                    //Console.WriteLine();
+                    //Console.WriteLine("アップデート利用可能:" + version);
+                    //Console.WriteLine();
                     Global.update = true;
+                    Global.utext = "アップデート利用可能: " + version;
                 }
             }
             else
