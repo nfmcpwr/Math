@@ -41,6 +41,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="DataManager">
       <HintPath>lib\DataManager.dll</HintPath>
       <Private>True</Private>
