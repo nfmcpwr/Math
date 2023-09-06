@@ -28,7 +28,7 @@ namespace math
 {
     class Global
     {
-        public static string version = "3.5.22";
+        public static string version = "3.5.23";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static string utext;
@@ -604,6 +604,8 @@ namespace math
                 //Console.WriteLine(j);
                 Console.WriteLine("TranslatedText: " + ttext.translation_text);
             }
+
+            TMode();
         }
 
         public class Body
