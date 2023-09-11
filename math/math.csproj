@@ -63,8 +63,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="data\config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="data\convrule.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="data\default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="data\dic\newdicdata.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

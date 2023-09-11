@@ -39,6 +39,7 @@ namespace math
         public string Chart_id { get; set; }
         public string Chart_pw { get; set; }
         public string Classroom_url { get; set; }
+        public bool Flag_override { get; set; }
     }
     class Global
     {
@@ -46,29 +47,45 @@ namespace math
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static string utext;
-        public static Config config = (Config)GetFlags();
-        
-        
-        public static Flags flags = JsonConvert.DeserializeObject<Flags>(new StreamReader(Path.Combine("data","default.json"),Encoding.UTF8).ReadToEnd());
-        private static object GetFlags()
+        public static Flags flags = new Flags();
+        public static Config config = new Config();
+
+        public static async void GetFlagsAndConfig()
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Math", version));
             try
             {
-                Task t = Get(client);
-                t.Wait();
+                HttpResponseMessage response = await client.GetAsync("https://raw.githubusercontent.com/nfmcpwr/Math/main/flag.json");
+                string json = await response.Content.ReadAsStringAsync();
+                flags = JsonConvert.DeserializeObject<Flags>(json);
             }
-            catch (Exception e)
+            catch (Exception)
             {
+                StreamReader sr = new StreamReader(Path.Combine("data", "default.json"), Encoding.UTF8);
+                flags = JsonConvert.DeserializeObject<Flags>(sr.ReadToEnd());
+                sr.Close();
+            }
+            finally
+            {
+                StreamReader src = new StreamReader(Path.Combine("data", "config.json"), Encoding.UTF8);
+                config = JsonConvert.DeserializeObject<Config>(src.ReadToEnd());
+                src.Close();
 
+                if (config.Flag_override == true)
+                {
+                    StreamReader sro = new StreamReader(Path.Combine("data", "default.json"), Encoding.UTF8);
+                    flags = JsonConvert.DeserializeObject<Flags>(sro.ReadToEnd());
+                    sro.Close();
+                }
             }
         }
 
-        private static async Task Get(HttpClient c)
+        /*private static async Task<string> Get(HttpClient c)
         {
-            HttpResponseMessage response = await c.GetAsync("https://raw.githubusercontent.com/nfmcpwr/Math/main/flag.json");
-        }
+
+            return json;
+        }*/
     }
 
     class Program
@@ -299,7 +316,6 @@ namespace math
             {
                 if (Global.update == true)
                 {
-                    //Process.Start("msedge.exe", "https://github.com/nfmcpwr/Math/releases/");
                     OpenUrl("https://github.com/nfmcpwr/Math/releases/");
                 }
                 else
@@ -309,8 +325,8 @@ namespace math
             }
              else if (Mode == 1001 && Global.flags.Settings_enabled == true)
             {
-                Console.WriteLine(Global.testkey);
-                ModeSelect("");
+                Settings();
+
             }
             else if (Mode == 1002 && Global.flags.Classroom_enabled == true)
             {
@@ -318,8 +334,6 @@ namespace math
             }
             else if (Mode == 1003 && Global.flags.Chart_enabled == true)
             {
-                //string name = DataManager.Activity.File.ReadFileActivity("math","chartlogin.id");
-                //string key = DataManager.Activity.File.ReadFileActivity("math", "chartlogin.key");
                 OpenUrl("https://sviewer.jp/books/index.html?name=" + Global.config.Chart_id + "&password=" + Global.config.Chart_pw);
             }
             else if (Mode == 8)
@@ -341,18 +355,7 @@ namespace math
 
         static void Test()
         {
-            Console.WriteLine("チャートログイン情報の設定");
-            //DataManager.Activity.CheckDirectoryActivity("math");
-            Console.Write("ID:");
-            string id = Console.ReadLine();
-            //DataManager.Activity.CheckFileActivity("math", "chartlogin.id");
-            DataManager.Activity.File.WriteFileActivity("math", "chartlogin.id",id);
-            Console.WriteLine();
-            Console.Write("パスワード:");
-            string pw = Console.ReadLine();
-            //DataManager.Activity.CheckFileActivity("math", "chartlogin.key");
-            DataManager.Activity.File.WriteFileActivity("math", "chartlogin.key", pw);
-
+            //Test
         }
 
         static void DicMode()
@@ -388,15 +391,11 @@ namespace math
                         ProcessStartInfo processStartInfo = new ProcessStartInfo()
                         {
                             FileName = "adddicdata.bat",
-                            UseShellExecute = true,
-                            //Arguments = "adddicdata.bat"
-                            //WorkingDirectory = ".\\dicdata"
+                            UseShellExecute = true
                         };
 
                         Process.Start(processStartInfo).WaitForExit();
                         
-                        
-                        //Process.Start(".\\dicdata\\newdicdata.exe").WaitForExit();
                         DicMode();
                     }
                     else
@@ -428,17 +427,14 @@ namespace math
             if (httpResponse.IsSuccessStatusCode == true)
             {
                 string json = await httpResponse.Content.ReadAsStringAsync();
-                //Console.WriteLine(json);
+                
                 JsonDocument jsonDocument = JsonDocument.Parse(json);
                 JsonElement element = jsonDocument.RootElement;
                 element.TryGetProperty("tag_name", out JsonElement value);
                 string version = value.GetString();
-                //Console.WriteLine(version);
+                
                 if (version != "v" + Global.version)
                 {
-                    //Console.WriteLine();
-                    //Console.WriteLine("アップデート利用可能:" + version);
-                    //Console.WriteLine();
                     Global.update = true;
                     Global.utext = "アップデート利用可能: " + version;
                 }
@@ -453,11 +449,11 @@ namespace math
         static void ConnectionCheck()
         {
             Ping ping = new Ping();
-            //int c = 1;
+            
             try
             {
                 PingReply reply = ping.Send("google.com");
-                //Console.WriteLine(reply.Status);
+                
                 Task task = GetUpdate();
                 task.Wait();
                 
@@ -483,18 +479,36 @@ namespace math
             Console.ReadLine();
         }
 
+        static void Settings()
+        {
+            Console.WriteLine("設定");
+            Console.WriteLine("1 : チャート");
+            Console.WriteLine("0 : 戻る");
+
+            string m = Console.ReadLine();
+            if (m == "1")
+            {
+                StreamWriter sw = new StreamWriter(Path.Combine("data", "config.json"), false, Encoding.UTF8);
+                Console.Write("ID:");
+                Global.config.Chart_id = Console.ReadLine();
+                Console.Write("PW:");
+                Global.config.Chart_pw = Console.ReadLine();
+
+                sw.Write(JsonConvert.SerializeObject(Global.config));
+                sw.Close();
+
+                Settings();
+            }
+            else
+            {
+                ModeSelect("");
+            }
+        }
+
         static void Main(string[] args)
         {
             Console.Title = "Math " + Global.version;
-
-            /*AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
-            {
-                string assemblyPath = Path.Combine("lib", "DataManager.dll");
-                return Assembly.LoadFrom(assemblyPath);
-            };
-            /*Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory,"lib","DataManager.dll"));
-            Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, "lib", "FractionLib.dll"));
-            Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, "lib", "MathNet.Numerics.dll"));*/
+            Global.GetFlagsAndConfig();
             
             DataManager.Activity.Root.CheckRootDirActivity();
             DataManager.Activity.CheckDirectoryActivity("math");
@@ -507,24 +521,12 @@ namespace math
                 Exit();
             }
 
-            //Console.WriteLine("Math v" + Global.version);
             if (0 < args.Length && args[0] == "BFC73BBA0F6D4883A3EDC5B905455ED1")
             {
                 //Global.devmode = true;
             }
-            ConnectionCheck();
 
-            /*if (NetworkInterface.GetIsNetworkAvailable() == true)
-            {
-                Task task = GetUpdate();
-                task.Wait();
-                ModeSelect("");
-            }
-            else
-            {
-                ModeSelect("");
-            }*/
-            //ModeSelect("");
+            ConnectionCheck();
         }
     }
 
@@ -635,7 +637,6 @@ namespace math
             if (response.IsSuccessStatusCode != true)
             {
                 Console.WriteLine(response.StatusCode);
-                //Console.WriteLine(response.Content.ReadAsStringAsync());
             }
             else
             {
@@ -682,16 +683,6 @@ namespace math
             }
         }
 
-        /*public static void Mode2()
-        {
-            Console.WriteLine("Mode2");
-            Console.WriteLine("数式を入力");
-            Console.Write("Input:");
-            string Input = Console.ReadLine();
-            DataTable dataTable = new DataTable();
-            var Result = dataTable.Compute(Input, "");
-            Program.ModeSelect(Convert.ToString(Result));
-        }*/
 
         public static void Mode3()
         {
