@@ -26,14 +26,49 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace math
 {
+    class Flags
+    {
+        public bool Chart_enabled { get; set; }
+        public bool Classroom_enabled { get; set; }
+        public bool Dev { get; set; }
+        public bool Settings_enabled { get; set; }
+    }
+
+    class Config
+    {
+        public string Chart_id { get; set; }
+        public string Chart_pw { get; set; }
+        public string Classroom_url { get; set; }
+    }
     class Global
     {
         public static string version = "3.5.23";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static string utext;
-        public static bool devmode = false;
-        //public static int a;
+        public static Config config = (Config)GetFlags();
+        
+        
+        public static Flags flags = JsonConvert.DeserializeObject<Flags>(new StreamReader(Path.Combine("data","default.json"),Encoding.UTF8).ReadToEnd());
+        private static object GetFlags()
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Math", version));
+            try
+            {
+                Task t = Get(client);
+                t.Wait();
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        private static async Task Get(HttpClient c)
+        {
+            HttpResponseMessage response = await c.GetAsync("https://raw.githubusercontent.com/nfmcpwr/Math/main/flag.json");
+        }
     }
 
     class Program
@@ -56,12 +91,12 @@ namespace math
                 //Console.WriteLine();
             }
 
-            if (Global.devmode == true)
+            if (Global.flags.Dev == true)
             {
                 Console.WriteLine();
 
             }
-
+            
             Console.WriteLine("操作を選択");
             Console.WriteLine();
             Console.WriteLine("1 : 文字を含まない計算");
@@ -88,13 +123,19 @@ namespace math
                 Console.WriteLine("100 : アップデートリリースページを開く");
             }
 
-            if (Global.devmode == true)
+            if (Global.flags.Settings_enabled == true)
             {
-                Console.WriteLine("1001 : チャート設定");
+                Console.WriteLine("1001 : 設定");
+            }
+
+            if (Global.flags.Classroom_enabled == true)
+            {
                 Console.WriteLine("1002 : Google Classroomを開く");
+            }
+
+            if (Global.flags.Chart_enabled == true)
+            {
                 Console.WriteLine("1003 : チャートを開く");
-                //Console.WriteLine("1004 : 辞書モード");
-                Console.WriteLine();
             }
 
             Console.WriteLine("0 : 終了");
@@ -266,21 +307,20 @@ namespace math
                     ModeSelect("");
                 }
             }
-             else if (Mode == 1001 && Global.devmode == true)
+             else if (Mode == 1001 && Global.flags.Settings_enabled == true)
             {
                 Console.WriteLine(Global.testkey);
                 ModeSelect("");
             }
-            else if (Mode == 1002 && Global.devmode == true)
+            else if (Mode == 1002 && Global.flags.Classroom_enabled == true)
             {
-                //System.Diagnostics.Process.Start("explorer.exe", "msedge https://classroom.google.com/c/NjAzNDU1NDUxMTU4");
-                OpenUrl("https://classroom.google.com/c/NjAzNDU1NDUxMTU4");
+                OpenUrl(Global.config.Classroom_url);
             }
-            else if (Mode == 1003 && Global.devmode == true)
+            else if (Mode == 1003 && Global.flags.Chart_enabled == true)
             {
-                string name = DataManager.Activity.File.ReadFileActivity("math","chartlogin.id");
-                string key = DataManager.Activity.File.ReadFileActivity("math", "chartlogin.key");
-                OpenUrl("https://sviewer.jp/books/index.html?name=" + name + "&password=" + key);
+                //string name = DataManager.Activity.File.ReadFileActivity("math","chartlogin.id");
+                //string key = DataManager.Activity.File.ReadFileActivity("math", "chartlogin.key");
+                OpenUrl("https://sviewer.jp/books/index.html?name=" + Global.config.Chart_id + "&password=" + Global.config.Chart_pw);
             }
             else if (Mode == 8)
             {
@@ -470,7 +510,7 @@ namespace math
             //Console.WriteLine("Math v" + Global.version);
             if (0 < args.Length && args[0] == "BFC73BBA0F6D4883A3EDC5B905455ED1")
             {
-                Global.devmode = true;
+                //Global.devmode = true;
             }
             ConnectionCheck();
 
