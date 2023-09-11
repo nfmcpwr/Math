@@ -43,7 +43,7 @@ namespace math
     }
     class Global
     {
-        public static string version = "3.5.23";
+        public static string version = "3.6(5499)";
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static string utext;
