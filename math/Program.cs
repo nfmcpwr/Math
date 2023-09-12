@@ -138,7 +138,7 @@ namespace math
             Console.WriteLine("16 : データ");
             Console.WriteLine("17 : 関数グラフ");
             Console.WriteLine("18 : 翻訳");
-            Console.WriteLine("19 : ベクトル演算");
+            Console.WriteLine("19 : ベクトル");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
@@ -2144,6 +2144,10 @@ namespace math
                 v2.Y = float.Parse(Console.ReadLine());
 
                 ans = v1 / v2;
+            }
+            else
+            {
+                Program.ModeSelect("");
             }
 
             Program.ModeSelect(ans.ToString());
