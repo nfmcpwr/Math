@@ -1,7 +1,8 @@
 # Math
 ![Windows](https://img.shields.io/badge/-Windows-0078D6.svg?logo=windows&style=plastic&label=)
 [![Latest Version](https://img.shields.io/github/v/release/nfmcpwr/Math?style=plastic)](https://github.com/nfmcpwr/Math/releases)
-![Downloads](https://img.shields.io/github/downloads/nfmcpwr/Math/total?color=green&style=plastic)<br>
+![Downloads](https://img.shields.io/github/downloads/nfmcpwr/Math/total?color=green&style=plastic)
+[![Build](https://github.com/nfmcpwr/Math/actions/workflows/dotnet-desktop.yml/badge.svg?branch=main)](https://github.com/nfmcpwr/Math/actions/workflows/dotnet-desktop.yml)<br>
 
 数学計算機
 
