@@ -1,6 +1,6 @@
 {
-	"Chart_enabled": "false",
-	"Classroom_enabled": "false",
-	"Dev": "false",
-	"Settings_enabled": "false"
+	"Chart_enabled": false,
+	"Classroom_enabled": false,
+	"Dev": false,
+	"Settings_enabled": false
 }
