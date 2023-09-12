@@ -2,5 +2,5 @@
 	"Chart_id": "",
 	"Chart_pw": "",
 	"Classroom_url": "https://classroom.google.com/",
-	"Flag_override":  "false"
+	"Flag_override":  false
 }

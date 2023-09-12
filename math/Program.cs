@@ -21,6 +21,7 @@ using MathNet.Numerics.Statistics;
 using Newtonsoft.Json;
 using KeyControl;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
+using System.Threading;
 //using System.Drawing;
 //using System.Windows.Forms;
 
@@ -43,7 +44,8 @@ namespace math
     }
     class Global
     {
-        public static string version = "3.6(5499)";
+        public static string version = "3.6";
+        public static int vc = 5499;
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static string utext;
@@ -74,18 +76,19 @@ namespace math
 
                 if (config.Flag_override == true)
                 {
-                    StreamReader sro = new StreamReader(Path.Combine("data", "default.json"), Encoding.UTF8);
-                    flags = JsonConvert.DeserializeObject<Flags>(sro.ReadToEnd());
-                    sro.Close();
+                    FlagOverride();
                 }
             }
         }
 
-        /*private static async Task<string> Get(HttpClient c)
+        private static void FlagOverride()
         {
+            StreamReader sro = new StreamReader(Path.Combine(Environment.CurrentDirectory, "data", "default.json"), Encoding.UTF8);
+            Flags overridedFlag = JsonConvert.DeserializeObject<Flags>(sro.ReadToEnd());
+            sro.Close();
 
-            return json;
-        }*/
+            flags = overridedFlag;
+        }
     }
 
     class Program
@@ -507,13 +510,8 @@ namespace math
 
         static void Main(string[] args)
         {
-            Console.Title = "Math " + Global.version;
+            Console.Title = "Math " + Global.version + "(" + Global.vc + ")";
             Global.GetFlagsAndConfig();
-            
-            DataManager.Activity.Root.CheckRootDirActivity();
-            DataManager.Activity.CheckDirectoryActivity("math");
-            DataManager.Activity.CheckFileActivity("math", "chartlogin.id");
-            DataManager.Activity.CheckFileActivity("math", "chartlogin.key");
 
             if (File.Exists(Path.Combine(DataManager.GlobalVariables.DataPath,"math","dev")) == false)
             {
@@ -521,11 +519,7 @@ namespace math
                 Exit();
             }
 
-            if (0 < args.Length && args[0] == "BFC73BBA0F6D4883A3EDC5B905455ED1")
-            {
-                //Global.devmode = true;
-            }
-
+            Thread.Sleep(1000);
             ConnectionCheck();
         }
     }
