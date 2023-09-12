@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using KeyControl;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using System.Threading;
+using System.Numerics;
 //using System.Drawing;
 //using System.Windows.Forms;
 
@@ -137,10 +138,16 @@ namespace math
             Console.WriteLine("16 : データ");
             Console.WriteLine("17 : 関数グラフ");
             Console.WriteLine("18 : 翻訳");
+            Console.WriteLine("19 : ベクトル演算");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
             {
                 Console.WriteLine("100 : アップデートリリースページを開く");
+            }
+
+            if (Global.flags.Dev == true)
+            {
+                Console.WriteLine("1000 : Test");
             }
 
             if (Global.flags.Settings_enabled == true)
@@ -305,7 +312,10 @@ namespace math
             {
                 Translation.TMode();
             }
-
+            else if (Mode == 19)
+            {
+                Calc.Mode19();
+            }
             
             
             
@@ -325,6 +335,10 @@ namespace math
                 {
                     ModeSelect("");
                 }
+            }
+            else if (Mode == 1000 && Global.flags.Dev == true)
+            {
+                Test();
             }
              else if (Mode == 1001 && Global.flags.Settings_enabled == true)
             {
@@ -359,6 +373,11 @@ namespace math
         static void Test()
         {
             //Test
+            Vector2 v1 = new Vector2(1, 1);
+            Vector2 v2 = new Vector2(2, 2);
+            Vector2 r = v1 + v2;
+            Console.WriteLine(r);
+            Console.ReadLine();
         }
 
         static void DicMode()
@@ -2058,6 +2077,76 @@ namespace math
             {
                 Program.ExceptionHandler(e.ToString(), e);
             }
+        }
+
+        public static void Mode19()
+        {
+            Console.WriteLine("1 : +");
+            Console.WriteLine("2 : -");
+            Console.WriteLine("3 : *");
+            Console.WriteLine("4 : /");
+            Console.WriteLine("-------------------------------------");
+            string m = Console.ReadLine();
+
+            Vector2 v1 = new Vector2();
+            Vector2 v2 = new Vector2();
+            Vector2 ans = new Vector2();
+
+            if (m == "1")
+            {
+                Console.WriteLine("v1 + v2");
+                Console.Write("v1.X:");
+                v1.X = float.Parse(Console.ReadLine());
+                Console.Write("v1.Y:");
+                v1.Y = float.Parse(Console.ReadLine());
+                Console.Write("v2.X:");
+                v2.X = float.Parse(Console.ReadLine());
+                Console.Write("v2.Y:");
+                v2.Y = float.Parse(Console.ReadLine());
+
+                ans = v1 + v2;
+            }
+            else if (m == "2")
+            {
+                Console.WriteLine("v1 - v2");
+                v1.X = float.Parse(Console.ReadLine());
+                Console.Write("v1.Y:");
+                v1.Y = float.Parse(Console.ReadLine());
+                Console.Write("v2.X:");
+                v2.X = float.Parse(Console.ReadLine());
+                Console.Write("v2.Y:");
+                v2.Y = float.Parse(Console.ReadLine());
+
+                ans = v1 - v2;
+            }
+            else if (m == "3")
+            {
+                Console.WriteLine("v1 * v2");
+                v1.X = float.Parse(Console.ReadLine());
+                Console.Write("v1.Y:");
+                v1.Y = float.Parse(Console.ReadLine());
+                Console.Write("v2.X:");
+                v2.X = float.Parse(Console.ReadLine());
+                Console.Write("v2.Y:");
+                v2.Y = float.Parse(Console.ReadLine());
+
+                ans = v1 * v2;
+            }
+            else if (m == "4")
+            {
+                Console.WriteLine("v1 / v2");
+                v1.X = float.Parse(Console.ReadLine());
+                Console.Write("v1.Y:");
+                v1.Y = float.Parse(Console.ReadLine());
+                Console.Write("v2.X:");
+                v2.X = float.Parse(Console.ReadLine());
+                Console.Write("v2.Y:");
+                v2.Y = float.Parse(Console.ReadLine());
+
+                ans = v1 / v2;
+            }
+
+            Program.ModeSelect(ans.ToString());
         }
     }
 }
