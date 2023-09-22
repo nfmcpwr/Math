@@ -373,11 +373,17 @@ namespace math
         static void Test()
         {
             //Test
-            Vector2 v1 = new Vector2(1, 1);
-            Vector2 v2 = new Vector2(2, 2);
-            Vector2 r = v1 + v2;
-            Console.WriteLine(r);
+            double a = double.Parse(Console.ReadLine());
+            double b = double.Parse(Console.ReadLine());
+            double c = double.Parse(Console.ReadLine());
+
+            for (int x = -100; x < 100; x++)
+            {
+                Console.WriteLine("x = " + x + ", " + (a * Math.Pow(x, 2) + b * x + c));
+            }
+
             Console.ReadLine();
+            ModeSelect("");
         }
 
         static void DicMode()
@@ -689,7 +695,7 @@ namespace math
                 var Result = dataTable.Compute(Input, "");
                 Program.ModeSelect(Convert.ToString(Result));
             }
-            catch (EvaluateException e)
+            catch (Exception e)
             {
                 //Exception e = new EvaluateException();
                 Program.ExceptionHandler(e.ToString(), e);
@@ -716,16 +722,16 @@ namespace math
 
                 Program.ModeSelect(Convert.ToString(x));
             }
-            catch(OverflowException e)
+            catch(Exception e)
             {
                 //Exception e = new OverflowException();
                 Program.ExceptionHandler(e.ToString(), e);
             }
-            catch (FormatException e)
-            {
-                //Exception e = new FormatException();
-                Program.ExceptionHandler(e.ToString(), e);
-            }
+            //catch (FormatException e)
+            //{
+            //    //Exception e = new FormatException();
+            //    Program.ExceptionHandler(e.ToString(), e);
+            //}
 
         }
 
@@ -756,16 +762,16 @@ namespace math
 
                 Program.ModeSelect(Result);
             }
-            catch(OverflowException e)
+            catch(Exception e)
             {
                 //Exception e = new OverflowException();
                 Program.ExceptionHandler(e.ToString(), e);
             }
-            catch (FormatException e)
-            {
-                //Exception e = new FormatException();
-                Program.ExceptionHandler(e.ToString(), e);
-            }
+            //catch (FormatException e)
+            //{
+            //    //Exception e = new FormatException();
+            //    Program.ExceptionHandler(e.ToString(), e);
+            //}
         }
 
         public static void Mode5(bool Tei)
@@ -972,16 +978,16 @@ namespace math
                 }
             }
         }
-            catch (FormatException e)
+            catch (Exception e)
             {
                 //Exception e = new FormatException();
                 Program.ExceptionHandler(e.ToString(), e);
             }
-            catch(OverflowException e)
-            {
-                //Exception e = new OverflowException();
-                Program.ExceptionHandler(e.ToString(), e);
-            }
+            //catch(OverflowException e)
+            //{
+            //    //Exception e = new OverflowException();
+            //    Program.ExceptionHandler(e.ToString(), e);
+            //}
         }
 
         public static void Teiseki(int kousuu,string F1_1,int? F1_2,string F2_1,int? F2_2,string F3_1,int? F3_2,string F4_1,int? F4_2,string F5_1,int? F5_2) //ax^p + bx^q = a,p,b,q
@@ -1066,13 +1072,13 @@ namespace math
                 {
                     Console.WriteLine("ax^p");
                     Console.Write("a:");
-                    int a = int.Parse(Console.ReadLine());
+                    double a = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("p:");
-                    int p = int.Parse(Console.ReadLine());
+                    double p = double.Parse(Console.ReadLine());
                     Console.WriteLine();
 
-                    int ap = p - 1;
+                    double ap = p - 1;
                     string ans = (a * p) + "x^" + ap;
                     if (p != 0)
                     {
@@ -1089,20 +1095,20 @@ namespace math
                 {
                     Console.WriteLine("ax^p + bx^q");
                     Console.Write("a:");
-                    int a = int.Parse(Console.ReadLine());
+                    double a = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("p:");
-                    int p = int.Parse(Console.ReadLine());
+                    double p = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("b:");
-                    int b = int.Parse(Console.ReadLine());
+                    double b = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("q:");
-                    int q = int.Parse(Console.ReadLine());
+                    double q = double.Parse(Console.ReadLine());
                     Console.WriteLine();
 
-                    int ap = p - 1;
-                    int bq = q - 1;
+                    double ap = p - 1;
+                    double bq = q - 1;
 
                     string ans1 = (a * p) + "x^" + ap;
                     string ans2 = (b * q) + "x^" + bq;
@@ -1135,27 +1141,27 @@ namespace math
                 {
                     Console.WriteLine("ax^p + bx^q + cx^r");
                     Console.Write("a:");
-                    int a = int.Parse(Console.ReadLine());
+                    double a = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("p:");
-                    int p = int.Parse(Console.ReadLine());
+                    double p = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("b:");
-                    int b = int.Parse(Console.ReadLine());
+                    double b = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("q:");
-                    int q = int.Parse(Console.ReadLine());
+                    double q = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("c:");
-                    int c = int.Parse(Console.ReadLine());
+                    double c = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("r:");
-                    int r = int.Parse(Console.ReadLine());
+                    double r = double.Parse(Console.ReadLine());
                     Console.WriteLine();
 
-                    int ap = p - 1;
-                    int bq = q - 1;
-                    int cr = r - 1;
+                    double ap = p - 1;
+                    double bq = q - 1;
+                    double cr = r - 1;
                     string ans1 = (a * p) + "x^" + ap;
                     string ans2 = (b * q) + "x^" + bq;
                     string ans3 = (c * r) + "x^" + cr;
@@ -1200,34 +1206,34 @@ namespace math
                 {
                     Console.WriteLine("ax^p + bx^q + cx^r + dx^s");
                     Console.Write("a:");
-                    int a = int.Parse(Console.ReadLine());
+                    double a = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("p:");
-                    int p = int.Parse(Console.ReadLine());
+                    double p = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("b:");
-                    int b = int.Parse(Console.ReadLine());
+                    double b = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("q:");
-                    int q = int.Parse(Console.ReadLine());
+                    double q = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("c:");
-                    int c = int.Parse(Console.ReadLine());
+                    double c = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("r:");
-                    int r = int.Parse(Console.ReadLine());
+                    double r = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("d:");
-                    int d = int.Parse(Console.ReadLine());
+                    double d = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("s:");
-                    int s = int.Parse(Console.ReadLine());
+                    double s = double.Parse(Console.ReadLine());
                     Console.WriteLine();
 
-                    int ap = p - 1;
-                    int bq = q - 1;
-                    int cr = r - 1;
-                    int ds = s - 1;
+                    double ap = p - 1;
+                    double bq = q - 1;
+                    double cr = r - 1;
+                    double ds = s - 1;
                     string ans1 = (a * p) + "x^" + ap;
                     string ans2 = (b * q) + "x^" + bq;
                     string ans3 = (c * r) + "x^" + cr;
@@ -1285,41 +1291,41 @@ namespace math
                 {
                     Console.WriteLine("ax^p + bx^q + cx^r + dx^s + ex^t");
                     Console.Write("a:");
-                    int a = int.Parse(Console.ReadLine());
+                    double a = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("p:");
-                    int p = int.Parse(Console.ReadLine());
+                    double p = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("b:");
-                    int b = int.Parse(Console.ReadLine());
+                    double b = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("q:");
-                    int q = int.Parse(Console.ReadLine());
+                    double q = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("c:");
-                    int c = int.Parse(Console.ReadLine());
+                    double c = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("r:");
-                    int r = int.Parse(Console.ReadLine());
+                    double r = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("d:");
-                    int d = int.Parse(Console.ReadLine());
+                    double d = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("s:");
-                    int s = int.Parse(Console.ReadLine());
+                    double s = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("e:");
-                    int e = int.Parse(Console.ReadLine());
+                    double e = double.Parse(Console.ReadLine());
                     Console.WriteLine();
                     Console.Write("t:");
-                    int t = int.Parse(Console.ReadLine());
+                    double t = double.Parse(Console.ReadLine());
                     Console.WriteLine();
 
-                    int ap = p - 1;
-                    int bq = q - 1;
-                    int cr = r - 1;
-                    int ds = s - 1;
-                    int et = t - 1;
+                    double ap = p - 1;
+                    double bq = q - 1;
+                    double cr = r - 1;
+                    double ds = s - 1;
+                    double et = t - 1;
                     string ans1 = (a * p) + "x^" + ap;
                     string ans2 = (b * q) + "x^" + bq;
                     string ans3 = (c * r) + "x^" + cr;
@@ -1387,18 +1393,18 @@ namespace math
                 }
 
             } 
-            catch (OverflowException e)
+            catch (Exception e)
             {
                 //Exception e = new OverflowException();
                 Program.ExceptionHandler(e.ToString(), e);
             }
-            catch (FormatException e)
-            {
-                //Exception e = new FormatException();
-                Program.ExceptionHandler(e.ToString(), e);
+            //catch (FormatException e)
+            //{
+            //    //Exception e = new FormatException();
+            //    Program.ExceptionHandler(e.ToString(), e);
                 
                 
-            }
+            //}
         }
 
         public static void Mode7()
@@ -1971,10 +1977,10 @@ namespace math
                 Console.WriteLine("Mode13");
                 Console.WriteLine("a^n");
                 Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
+                double a = double.Parse(Console.ReadLine());
                 Console.WriteLine();
                 Console.Write("n:");
-                int n = int.Parse(Console.ReadLine());
+                double n = double.Parse(Console.ReadLine());
                 string ans = Convert.ToString(Math.Pow(a, n));
                 Program.ModeSelect(ans);
             }
