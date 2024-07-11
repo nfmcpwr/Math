@@ -37,8 +37,8 @@ namespace math
     }
     class Global
     {
-        public static string version = "3.6";
-        public static int vc = 5597;
+        public static string version = "3.7";
+        public static int vc = 6636;
         public static string testkey = Guid.NewGuid().ToString("N");
         public static bool update = false;
         public static string utext;
