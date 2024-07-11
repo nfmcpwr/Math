@@ -1,6 +1,7 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
+﻿using MathNet.Numerics;
+using MathNet.Numerics.Statistics;
+using Newtonsoft.Json;
+using System;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -8,21 +9,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.Xml;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using MathNet.Numerics;
-using MathNet.Numerics.Statistics;
-using Newtonsoft.Json;
-using KeyControl;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
-using System.Threading;
 using System.Numerics;
+using System.Text;
+using System.Text.Json;
+//using KeyControl;
+using System.Threading;
+using System.Threading.Tasks;
 //using System.Drawing;
 //using System.Windows.Forms;
 
@@ -117,7 +109,7 @@ namespace math
                 Console.WriteLine();
 
             }
-            
+
             Console.WriteLine("操作を選択");
             Console.WriteLine();
             Console.WriteLine("1 : 文字を含まない計算");
@@ -137,7 +129,7 @@ namespace math
             Console.WriteLine("15 : 最小公倍数");
             Console.WriteLine("16 : データ");
             Console.WriteLine("17 : 関数グラフ");
-            Console.WriteLine("18 : 翻訳");
+            //Console.WriteLine("18 : 翻訳");
             Console.WriteLine("19 : ベクトル");
             Console.WriteLine("------------------------------");
             if (Global.update == true)
@@ -183,7 +175,7 @@ namespace math
                     CheckMode(SelectedMode);
                 }
             }
-            catch(OverflowException e)
+            catch (OverflowException e)
             {
                 //Exception e = new OverflowException();
                 ExceptionHandler(e.ToString(), e);
@@ -233,10 +225,10 @@ namespace math
             else if (Mode == 7)
             {
                 //計算練習
-                
-                
-                    Calc.Mode7();
-                
+
+
+                Calc.Mode7();
+
             }
             else if (Mode == 9)
             {
@@ -283,7 +275,7 @@ namespace math
                     ModeSelect("");
                 }
             }
-            else if (Mode == 13) 
+            else if (Mode == 13)
             {
                 //累乗
                 Calc.Mode13();
@@ -308,24 +300,24 @@ namespace math
                 //グラフ
                 Calc.Mode17();
             }
-            else if (Mode == 18)
-            {
-                Translation.TMode();
-            }
+            //else if (Mode == 18)
+            //{
+            //    Translation.TMode();
+            //}
             else if (Mode == 19)
             {
                 Calc.Mode19();
             }
-            
-            
-            
 
-             //s
-             else if (Mode == 0)
+
+
+
+            //s
+            else if (Mode == 0)
             {
                 Exit();
             }
-             else if (Mode == 100)
+            else if (Mode == 100)
             {
                 if (Global.update == true)
                 {
@@ -340,7 +332,7 @@ namespace math
             {
                 Test();
             }
-             else if (Mode == 1001 && Global.flags.Settings_enabled == true)
+            else if (Mode == 1001 && Global.flags.Settings_enabled == true)
             {
                 Settings();
 
@@ -362,7 +354,7 @@ namespace math
             {
                 ModeSelect("");
             }
-            
+
         }
 
         static void Exit()
@@ -423,14 +415,14 @@ namespace math
                         };
 
                         Process.Start(processStartInfo).WaitForExit();
-                        
+
                         DicMode();
                     }
                     else
                     {
                         DicMode();
                     }
-                    
+
                 }
             }
 
@@ -455,12 +447,12 @@ namespace math
             if (httpResponse.IsSuccessStatusCode == true)
             {
                 string json = await httpResponse.Content.ReadAsStringAsync();
-                
+
                 JsonDocument jsonDocument = JsonDocument.Parse(json);
                 JsonElement element = jsonDocument.RootElement;
                 element.TryGetProperty("tag_name", out JsonElement value);
                 string version = value.GetString();
-                
+
                 if (version != "v" + Global.version)
                 {
                     Global.update = true;
@@ -477,24 +469,24 @@ namespace math
         static void ConnectionCheck()
         {
             Ping ping = new Ping();
-            
+
             try
             {
                 PingReply reply = ping.Send("google.com");
-                
+
                 Task task = GetUpdate();
                 task.Wait();
-                
+
             }
             catch (PingException)
             {
                 ModeSelect("");
             }
-            
-            
+
+
         }
 
-        public static void ExceptionHandler(string exception,Exception e)
+        public static void ExceptionHandler(string exception, Exception e)
         {
             Console.Clear();
             Console.WriteLine("ExceptionHandler");
@@ -538,7 +530,7 @@ namespace math
             Console.Title = "Math " + Global.version + "(" + Global.vc + ")";
             Global.GetFlagsAndConfig();
 
-            if (File.Exists(Path.Combine(DataManager.GlobalVariables.DataPath,"math","dev")) == false)
+            if (File.Exists(Path.Combine(DataManager.GlobalVariables.DataPath, "math", "dev")) == false)
             {
                 DataManager.Activity.CheckFileActivity("math", "dev");
                 Exit();
@@ -549,137 +541,137 @@ namespace math
         }
     }
 
-    public class Translation
-    {
-        class InternalValue
-        {
-            public static readonly string key = l.I("JKiHPcVUxmnyNTSWZozjfeYlrAXasFEOvQuBbICw");
-        }
+    //public class Translation
+    //{
+    //    class InternalValue
+    //    {
+    //        public static readonly string key = l.I("JKiHPcVUxmnyNTSWZozjfeYlrAXasFEOvQuBbICw");
+    //    }
 
-        public static void TMode()
-        {
-            try
-            {
-                Console.WriteLine("翻訳");
-                Console.WriteLine("1 : en -> ja");
-                Console.WriteLine("2 : ja -> en");
+    //    public static void TMode()
+    //    {
+    //        try
+    //        {
+    //            Console.WriteLine("翻訳");
+    //            Console.WriteLine("1 : en -> ja");
+    //            Console.WriteLine("2 : ja -> en");
 
-                Console.WriteLine("0 : 終了");
-                Console.WriteLine("-----------------------------------");
-                string i = Console.ReadLine();
+    //            Console.WriteLine("0 : 終了");
+    //            Console.WriteLine("-----------------------------------");
+    //            string i = Console.ReadLine();
 
-                if (i == "1")
-                {
-                    Request("EN", "JA");
-                }
-                else if (i == "2")
-                {
-                    Request("JA", "EN");
-                }
-                else
-                {
-                    Program.ModeSelect("");
-                }
-            }
-            catch (Exception e)
-            {
-                Exception ex = new HttpRequestException(e.Message, new HttpRequestException());
-                Program.ExceptionHandler(ex.ToString(), e);
-            }
-        }
+    //            if (i == "1")
+    //            {
+    //                Request("EN", "JA");
+    //            }
+    //            else if (i == "2")
+    //            {
+    //                Request("JA", "EN");
+    //            }
+    //            else
+    //            {
+    //                Program.ModeSelect("");
+    //            }
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            Exception ex = new HttpRequestException(e.Message, new HttpRequestException());
+    //            Program.ExceptionHandler(ex.ToString(), e);
+    //        }
+    //    }
 
-        static void Request(string source, string target)
-        {
-            string src;
-            string tgt;
+    //    static void Request(string source, string target)
+    //    {
+    //        string src;
+    //        string tgt;
 
-            if (source == "EN")
-            {
-                src = "eng_Latn";
-            }
-            else if (source == "JA")
-            {
-                src = "jpn_Jpan";
-            }
-            else
-            {
-                throw new Exception();
-            }
-            
-            if(target == "EN")
-            {
-                tgt = "eng_Latn";
-            }
-            else if (target == "JA")
-            {
-                tgt = "jpn_Jpan";
-            }
-            else
-            {
-                throw new Exception();
-            }
+    //        if (source == "EN")
+    //        {
+    //            src = "eng_Latn";
+    //        }
+    //        else if (source == "JA")
+    //        {
+    //            src = "jpn_Jpan";
+    //        }
+    //        else
+    //        {
+    //            throw new Exception();
+    //        }
 
-            
-            Console.Write("Text:");
-            string txt = Console.ReadLine();
-
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", InternalValue.key);
-            client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Math", Global.version));
-
-            HttpRequestMessage req = new HttpRequestMessage();
-            req.RequestUri = new Uri("https://api.nlpcloud.io/v1/nllb-200-3-3b/translation");
-            req.Method = HttpMethod.Post;
-            req.Content = new StringContent(Input(src, tgt, txt), Encoding.UTF8, "application/json");
-
-            Task task = Translate(client, req);
-            task.Wait();
-
-            //Console.ReadLine();
-        }
-
-        static string Input(string source, string target, string text)
-        {
-            Body reqbody = new Body();
-            reqbody.source = source;
-            reqbody.target = target;
-            reqbody.text = text;
-
-            string json = JsonConvert.SerializeObject(reqbody);
-            return json;
-        }
+    //        if(target == "EN")
+    //        {
+    //            tgt = "eng_Latn";
+    //        }
+    //        else if (target == "JA")
+    //        {
+    //            tgt = "jpn_Jpan";
+    //        }
+    //        else
+    //        {
+    //            throw new Exception();
+    //        }
 
 
-        static async Task Translate(HttpClient c, HttpRequestMessage r)
-        {
-            HttpResponseMessage response = await c.SendAsync(r);
-            if (response.IsSuccessStatusCode != true)
-            {
-                Console.WriteLine(response.StatusCode);
-            }
-            else
-            {
-                string j = await response.Content.ReadAsStringAsync();
-                Translatedtext ttext = JsonConvert.DeserializeObject<Translatedtext>(j);
-                //Console.WriteLine(j);
-                Console.WriteLine("TranslatedText: " + ttext.translation_text);
-            }
+    //        Console.Write("Text:");
+    //        string txt = Console.ReadLine();
 
-            TMode();
-        }
+    //        HttpClient client = new HttpClient();
+    //        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", InternalValue.key);
+    //        client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Math", Global.version));
 
-        public class Body
-        {
-            public string text { get; set; }
-            public string source { get; set; }
-            public string target { get; set; }
-        }
+    //        HttpRequestMessage req = new HttpRequestMessage();
+    //        req.RequestUri = new Uri("https://api.nlpcloud.io/v1/nllb-200-3-3b/translation");
+    //        req.Method = HttpMethod.Post;
+    //        req.Content = new StringContent(Input(src, tgt, txt), Encoding.UTF8, "application/json");
 
-        public class Translatedtext
-        {
-            public string translation_text { get; set; }
-        }
-    }
+    //        Task task = Translate(client, req);
+    //        task.Wait();
+
+    //        //Console.ReadLine();
+    //    }
+
+    //    static string Input(string source, string target, string text)
+    //    {
+    //        Body reqbody = new Body();
+    //        reqbody.source = source;
+    //        reqbody.target = target;
+    //        reqbody.text = text;
+
+    //        string json = JsonConvert.SerializeObject(reqbody);
+    //        return json;
+    //    }
+
+
+    //    static async Task Translate(HttpClient c, HttpRequestMessage r)
+    //    {
+    //        HttpResponseMessage response = await c.SendAsync(r);
+    //        if (response.IsSuccessStatusCode != true)
+    //        {
+    //            Console.WriteLine(response.StatusCode);
+    //        }
+    //        else
+    //        {
+    //            string j = await response.Content.ReadAsStringAsync();
+    //            Translatedtext ttext = JsonConvert.DeserializeObject<Translatedtext>(j);
+    //            //Console.WriteLine(j);
+    //            Console.WriteLine("TranslatedText: " + ttext.translation_text);
+    //        }
+
+    //        TMode();
+    //    }
+
+    //    public class Body
+    //    {
+    //        public string text { get; set; }
+    //        public string source { get; set; }
+    //        public string target { get; set; }
+    //    }
+
+    //    public class Translatedtext
+    //    {
+    //        public string translation_text { get; set; }
+    //    }
+    //}
 
     public class Calc
     {
@@ -722,7 +714,7 @@ namespace math
 
                 Program.ModeSelect(Convert.ToString(x));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //Exception e = new OverflowException();
                 Program.ExceptionHandler(e.ToString(), e);
@@ -762,7 +754,7 @@ namespace math
 
                 Program.ModeSelect(Result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //Exception e = new OverflowException();
                 Program.ExceptionHandler(e.ToString(), e);
@@ -780,204 +772,204 @@ namespace math
             {
 
                 if (Tei == true)
-            {
-                Console.WriteLine("Mode6");
-            }
-            else
-            {
-                Console.WriteLine("Mode5");
-            }
-
-            Console.Write("項数を入力:");
-            int kousuu = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-            if (kousuu == 1)
-            {
-                Console.WriteLine("∫ax^p dx");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-
-                int ap = p + 1;
-                string ans = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap + " + C";
-
-                if (Tei == true)
                 {
-                    Calc.Teiseki(1, a + " / " + ap, ap, "", null, "", null, "", null, "", null);
+                    Console.WriteLine("Mode6");
                 }
                 else
                 {
-                    Program.ModeSelect(ans);
+                    Console.WriteLine("Mode5");
                 }
-            }
-            else if (kousuu == 2)
-            {
-                Console.WriteLine("∫ax^p + bx^q dx");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
-                Console.WriteLine();
 
-                int ap = p + 1;
-                int bq = q + 1;
-                string ans1 = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap;
-                string ans2 = "(" + Convert.ToString(b) + " / " + Convert.ToString(bq) + ") x^" + bq;
-                if (Tei == true)
+                Console.Write("項数を入力:");
+                int kousuu = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+                if (kousuu == 1)
                 {
-                    Calc.Teiseki(2, a + " / " + ap, ap, b + " / " + bq, bq, "", null, "", null, "", null);
-                }
-                else
-                {
-                    Program.ModeSelect(ans1 + " + " + ans2 + " + C");
-                }
-            }
-            else if (kousuu == 3)
-            {
-                Console.WriteLine("∫ax^p + bx^q + cx^r dx");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
-                Console.WriteLine();
+                    Console.WriteLine("∫ax^p dx");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
 
-                int ap = p + 1;
-                int bq = q + 1;
-                int cr = r + 1;
-                string ans1 = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap;
-                string ans2 = "(" + Convert.ToString(b) + " / " + Convert.ToString(bq) + ") x^" + bq;
-                string ans3 = "(" + Convert.ToString(c) + " / " + Convert.ToString(cr) + ") x^" + cr;
-                if (Tei == true)
-                {
-                    Calc.Teiseki(3, a + " / " + ap, ap, b + " / " + bq, bq, c + " / " + cr, cr, "", null, "", null);
-                }
-                else
-                {
-                    Program.ModeSelect(ans1 + " + " + ans2 + " + " + ans3 + " + C");
-                }
-            }
-            else if (kousuu == 4)
-            {
-                Console.WriteLine("∫ax^p + bx^q + cx^r + dx^s dx");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("d:");
-                int d = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("s:");
-                int s = int.Parse(Console.ReadLine());
-                Console.WriteLine();
+                    int ap = p + 1;
+                    string ans = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap + " + C";
 
-                int ap = p + 1;
-                int bq = q + 1;
-                int cr = r + 1;
-                int ds = s + 1;
-                string ans1 = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap;
-                string ans2 = "(" + Convert.ToString(b) + " / " + Convert.ToString(bq) + ") x^" + bq;
-                string ans3 = "(" + Convert.ToString(c) + " / " + Convert.ToString(cr) + ") x^" + cr;
-                string ans4 = "(" + Convert.ToString(d) + " / " + Convert.ToString(ds) + ") x^" + ds;
-                if (Tei == true)
-                {
-                    Calc.Teiseki(4, a + " / " + ap, ap, b + " / " + bq, bq, c + " / " + cr, cr, d + " / " + ds, ds, "", null);
+                    if (Tei == true)
+                    {
+                        Calc.Teiseki(1, a + " / " + ap, ap, "", null, "", null, "", null, "", null);
+                    }
+                    else
+                    {
+                        Program.ModeSelect(ans);
+                    }
                 }
-                else
+                else if (kousuu == 2)
                 {
-                    Program.ModeSelect(ans1 + " + " + ans2 + " + " + ans3 + " + " + ans4 + " + C");
-                }
-            }
-            else if (kousuu == 5)
-            {
-                Console.WriteLine("∫ax^p + bx^q + cx^r + dx^s + ex^t dx");
-                Console.Write("a:");
-                int a = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("p:");
-                int p = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("b:");
-                int b = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("q:");
-                int q = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("c:");
-                int c = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("r:");
-                int r = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("d:");
-                int d = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("s:");
-                int s = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("e:");
-                int e = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                Console.Write("t:");
-                int t = int.Parse(Console.ReadLine());
-                Console.WriteLine();
+                    Console.WriteLine("∫ax^p + bx^q dx");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    int b = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    int q = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
 
-                int ap = p + 1;
-                int bq = q + 1;
-                int cr = r + 1;
-                int ds = s + 1;
-                int et = t + 1;
-                string ans1 = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap;
-                string ans2 = "(" + Convert.ToString(b) + " / " + Convert.ToString(bq) + ") x^" + bq;
-                string ans3 = "(" + Convert.ToString(c) + " / " + Convert.ToString(cr) + ") x^" + cr;
-                string ans4 = "(" + Convert.ToString(d) + " / " + Convert.ToString(ds) + ") x^" + ds;
-                string ans5 = "(" + Convert.ToString(e) + " / " + Convert.ToString(et) + ") x^" + et;
-                if (Tei == true)
-                {
-                    Calc.Teiseki(5, a + " / " + ap, ap, b + " / " + bq, bq, c + " / " + cr, cr, d + " / " + ds, ds, e + " / " + et, et);
+                    int ap = p + 1;
+                    int bq = q + 1;
+                    string ans1 = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap;
+                    string ans2 = "(" + Convert.ToString(b) + " / " + Convert.ToString(bq) + ") x^" + bq;
+                    if (Tei == true)
+                    {
+                        Calc.Teiseki(2, a + " / " + ap, ap, b + " / " + bq, bq, "", null, "", null, "", null);
+                    }
+                    else
+                    {
+                        Program.ModeSelect(ans1 + " + " + ans2 + " + C");
+                    }
                 }
-                else
+                else if (kousuu == 3)
                 {
-                    Program.ModeSelect(ans1 + " + " + ans2 + " + " + ans3 + " + " + ans4 + " + " + ans5 + " + C");
+                    Console.WriteLine("∫ax^p + bx^q + cx^r dx");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    int b = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    int q = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    int c = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    int r = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    int ap = p + 1;
+                    int bq = q + 1;
+                    int cr = r + 1;
+                    string ans1 = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap;
+                    string ans2 = "(" + Convert.ToString(b) + " / " + Convert.ToString(bq) + ") x^" + bq;
+                    string ans3 = "(" + Convert.ToString(c) + " / " + Convert.ToString(cr) + ") x^" + cr;
+                    if (Tei == true)
+                    {
+                        Calc.Teiseki(3, a + " / " + ap, ap, b + " / " + bq, bq, c + " / " + cr, cr, "", null, "", null);
+                    }
+                    else
+                    {
+                        Program.ModeSelect(ans1 + " + " + ans2 + " + " + ans3 + " + C");
+                    }
+                }
+                else if (kousuu == 4)
+                {
+                    Console.WriteLine("∫ax^p + bx^q + cx^r + dx^s dx");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    int b = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    int q = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    int c = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    int r = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("d:");
+                    int d = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("s:");
+                    int s = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    int ap = p + 1;
+                    int bq = q + 1;
+                    int cr = r + 1;
+                    int ds = s + 1;
+                    string ans1 = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap;
+                    string ans2 = "(" + Convert.ToString(b) + " / " + Convert.ToString(bq) + ") x^" + bq;
+                    string ans3 = "(" + Convert.ToString(c) + " / " + Convert.ToString(cr) + ") x^" + cr;
+                    string ans4 = "(" + Convert.ToString(d) + " / " + Convert.ToString(ds) + ") x^" + ds;
+                    if (Tei == true)
+                    {
+                        Calc.Teiseki(4, a + " / " + ap, ap, b + " / " + bq, bq, c + " / " + cr, cr, d + " / " + ds, ds, "", null);
+                    }
+                    else
+                    {
+                        Program.ModeSelect(ans1 + " + " + ans2 + " + " + ans3 + " + " + ans4 + " + C");
+                    }
+                }
+                else if (kousuu == 5)
+                {
+                    Console.WriteLine("∫ax^p + bx^q + cx^r + dx^s + ex^t dx");
+                    Console.Write("a:");
+                    int a = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("p:");
+                    int p = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("b:");
+                    int b = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("q:");
+                    int q = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("c:");
+                    int c = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("r:");
+                    int r = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("d:");
+                    int d = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("s:");
+                    int s = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("e:");
+                    int e = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("t:");
+                    int t = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    int ap = p + 1;
+                    int bq = q + 1;
+                    int cr = r + 1;
+                    int ds = s + 1;
+                    int et = t + 1;
+                    string ans1 = "(" + Convert.ToString(a) + " / " + Convert.ToString(ap) + ") x^" + ap;
+                    string ans2 = "(" + Convert.ToString(b) + " / " + Convert.ToString(bq) + ") x^" + bq;
+                    string ans3 = "(" + Convert.ToString(c) + " / " + Convert.ToString(cr) + ") x^" + cr;
+                    string ans4 = "(" + Convert.ToString(d) + " / " + Convert.ToString(ds) + ") x^" + ds;
+                    string ans5 = "(" + Convert.ToString(e) + " / " + Convert.ToString(et) + ") x^" + et;
+                    if (Tei == true)
+                    {
+                        Calc.Teiseki(5, a + " / " + ap, ap, b + " / " + bq, bq, c + " / " + cr, cr, d + " / " + ds, ds, e + " / " + et, et);
+                    }
+                    else
+                    {
+                        Program.ModeSelect(ans1 + " + " + ans2 + " + " + ans3 + " + " + ans4 + " + " + ans5 + " + C");
+                    }
                 }
             }
-        }
             catch (Exception e)
             {
                 //Exception e = new FormatException();
@@ -990,7 +982,7 @@ namespace math
             //}
         }
 
-        public static void Teiseki(int kousuu,string F1_1,int? F1_2,string F2_1,int? F2_2,string F3_1,int? F3_2,string F4_1,int? F4_2,string F5_1,int? F5_2) //ax^p + bx^q = a,p,b,q
+        public static void Teiseki(int kousuu, string F1_1, int? F1_2, string F2_1, int? F2_2, string F3_1, int? F3_2, string F4_1, int? F4_2, string F5_1, int? F5_2) //ax^p + bx^q = a,p,b,q
         {
             try
             {
@@ -1392,7 +1384,7 @@ namespace math
 
                 }
 
-            } 
+            }
             catch (Exception e)
             {
                 //Exception e = new OverflowException();
@@ -1402,8 +1394,8 @@ namespace math
             //{
             //    //Exception e = new FormatException();
             //    Program.ExceptionHandler(e.ToString(), e);
-                
-                
+
+
             //}
         }
 
@@ -1498,7 +1490,7 @@ namespace math
                 Program.ExceptionHandler(e.ToString(), e);
             }
 
-            static bool Q(int a,int b,int mode)
+            static bool Q(int a, int b, int mode)
             {
                 try
                 {
@@ -1556,10 +1548,10 @@ namespace math
                     Program.ExceptionHandler(e.ToString(), e);
                     return false;
                 }
-            } 
+            }
         }
 
-        public static void Mode9() 
+        public static void Mode9()
         {
             try
             {
@@ -1876,7 +1868,7 @@ namespace math
 
                 return new Fraction((int)numerator, (int)denominator);
             }
-        
+
 
             public struct Fraction
             {
@@ -1901,7 +1893,7 @@ namespace math
 
                 string t = reader.ReadToEnd();
                 string[] table = t.Split("-");
-                
+
                 string bun = "";
 
                 for (int i = 0; i < table.Length / 2; i++)
@@ -1931,9 +1923,9 @@ namespace math
                     Program.ExceptionHandler(e.ToString(), e);
                 }
             }
-            
+
         }
-        
+
         public static void Mode12_2()
         {
             try
